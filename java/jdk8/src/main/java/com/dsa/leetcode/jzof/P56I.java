@@ -47,11 +47,9 @@ public class P56I {
         for (int num : nums) n ^= num;
         // 找到 n 的第一个 1 所在的位置，并将其转化为数字 m
         m = n & (~n + 1);
-        // 利用 m 值将数组分为两个
-        for (int num : nums) {
-            if ((m & num) == 0) x ^= num;
-            else y ^= num;
-        }
+        // 利用 m 值将数组划分为两个
+        for (int num : nums) if ((m & num) == 0) x ^= num;
+        y = n ^ x; // n = x ^ y; x = n ^ y; y = n ^ x; 都成立
         return new int[]{x, y};
     }
 }

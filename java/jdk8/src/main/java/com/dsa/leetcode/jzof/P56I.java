@@ -10,7 +10,20 @@ package com.dsa.leetcode.jzof;
 public class P56I {
     
     public static void main(String[] args) {
+        P56I solution = new P56I();
+        int[] nums1 = new int[]{1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7};
+        System.out.println(solution.singleNumber(nums1));
+    }
     
+    /**
+     * 任给 x 都有 x ^ x = 0，按照异或运算的性质，就可以在一个数组中很快找出出现一次的数字。
+     */
+    public int singleNumber(int[] nums) {
+        int x = 0;
+        for (int num : nums) {
+            x = num;
+        }
+        return x; // 返回出现一次的数
     }
     
     public int[] singleNumbers(int[] nums) {

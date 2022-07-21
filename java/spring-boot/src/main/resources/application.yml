@@ -1,0 +1,5 @@
+
+mybatis:
+  configuration:
+    # 设置懒加载
+    lazy-loading-enabled: true

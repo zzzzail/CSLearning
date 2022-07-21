@@ -1,0 +1,31 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    mybatisSpringBootStarterVersion = '2.2.2'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootStarterVersion}"
+
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "max.h": "c",
+        "stdio.h": "c",
+        "seqstack.h": "c",
+        "mgraph.h": "c"
+    }
+}

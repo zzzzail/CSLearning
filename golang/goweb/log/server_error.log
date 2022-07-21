@@ -1,0 +1,6 @@
+[project]2022/07/12 - 12:11:57.427	[31merror[0m	/Users/zail/Workspace/github.com/zail/learn-computer-language/golang/goweb/src/start.go:27	accept tcp [::]:8888: use of closed network connection
+[project] 2022/07/12 - 12:20:10.212	[31merror[0m	/Users/zail/Workspace/github.com/zail/learn-computer-language/golang/goweb/src/start.go:27	accept tcp [::]:8888: use of closed network connection
+[project] 2022/07/12 - 12:20:30.251	[31merror[0m	/Users/zail/Workspace/github.com/zail/learn-computer-language/golang/goweb/src/start.go:27	accept tcp [::]:8888: use of closed network connection
+[project] 2022/07/12 - 12:32:51.119	[31merror[0m	/Users/zail/Workspace/github.com/zail/learn-computer-language/golang/goweb/src/start.go:27	accept tcp [::]:8888: use of closed network connection
+[project] 2022/07/12 - 13:41:11.276	[31merror[0m	/Users/zail/Workspace/github.com/zail/learn-computer-language/golang/goweb/src/start.go:27	accept tcp [::]:8888: use of closed network connection
+[project] 2022/07/12 - 14:36:46.306	[31merror[0m	/Users/zail/Workspace/github.com/zail/learn-computer-language/golang/goweb/src/start.go:27	accept tcp [::]:8888: use of closed network connection

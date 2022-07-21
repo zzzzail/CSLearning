@@ -1,0 +1,12 @@
+rootProject.name = 'netty'
+include 'netty-001'
+include 'netty-002'
+include 'netty-003'
+include 'netty-004'
+include 'netty-client'
+include 'netty-common'
+include 'netty-server'
+include 'rapid-rpc'
+include 'rpc-spring-test'
+include 'rpc-test'
+

@@ -40,4 +40,18 @@ public class P56I {
         }
         return new int[]{x, y};             // 5. 返回出现一次的数字
     }
+    
+    public int[] singleNumbers2(int[] nums) {
+        int x = 0, y = 0, n = 0, m = 0;
+        // 计算 x ^ y 的值，将其赋值给 n
+        for (int num : nums) n ^= num;
+        // 找到 n 的第一个 1 所在的位置，并将其转化为数字 m
+        m = n & (~n + 1);
+        // 利用 m 值将数组分为两个
+        for (int num : nums) {
+            if ((m & num) == 0) x ^= num;
+            else y ^= num;
+        }
+        return new int[]{x, y};
+    }
 }

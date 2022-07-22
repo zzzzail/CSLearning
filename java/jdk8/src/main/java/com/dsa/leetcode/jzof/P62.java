@@ -15,7 +15,7 @@ public class P62 {
     
     public int lastRemaining(int n, int m) {
         int res = 0;
-        // 最后一轮剩下2个人，所以从2开始反推
+        // 最后一轮剩下 2 个人，所以从 2 开始反推
         for (int i = 2; i <= n; i++) {
             res = (res + m) % i;
         }

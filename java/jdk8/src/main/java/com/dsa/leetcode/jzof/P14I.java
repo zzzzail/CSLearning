@@ -21,6 +21,7 @@ public class P14I {
             return (int) Math.pow(3, a);
         }
         else if (b == 1) {
+            // 一个 3 * 1 转换成 2 * 2，所以要 * 4
             return (int) Math.pow(3, a - 1) * 4;
         }
         else { // if (b == 2) {

@@ -4,7 +4,7 @@ package com.dsa.leetcode.jzof;
  * @author zail
  * @date 2022/7/19
  */
-public class P57 {
+public class P57I {
     
     public static void main(String[] args) {
     

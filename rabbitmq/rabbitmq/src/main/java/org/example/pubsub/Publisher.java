@@ -20,11 +20,12 @@ public class Publisher {
         try (Channel channel = RabbitMQUtils.getChannel()) {
             channel.exchangeDeclare("exchange-01", BuiltinExchangeType.HEADERS);
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            // channel.queuePurge()
             // 从控制台当中接受信息
             Scanner scanner = new Scanner(System.in);
             while (scanner.hasNext()) {
                 String message = scanner.next();
-                channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+                channel.basicPublish("exchange-01", QUEUE_NAME, null, message.getBytes());
                 System.out.println("发送消息完成:" + message);
             }
         }

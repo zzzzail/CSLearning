@@ -28,11 +28,14 @@ def first_step(word):
         'theData': soup.select('input[name=theData]')[0]['value'],
         'numOfSolutions': soup.select('input[name=numOfSolutions]')[0]['value'],
         'numOfSpeakers': soup.select('input[name=numOfSpeakers]')[0]['value'],
+        'qname': soup.select('input[name=qname]')[0]['value'],
+        'queryID': soup.select('input[name=qname]')[0]['value'],
+        'theID': soup.select('input[name=qname]')[0]['value'],
     }
 
 
 def second_step(qs_param):
-    url = 'http://bncweb.lancs.ac.uk/cgi-binbncXML/dlogs.pl?selected=Distribution&qname=Rhea123_1657765571&queryID=Rhea123_1657765571&thin=0&warned=0&numOfFiles=&view=list&dbname=&SQL=&letter=&phon=0&tag=&ot=&display=word&exclude=&program=search&run=&theID=Rhea123_1657765571&urlTest=yes'
+    url = 'http://bncweb.lancs.ac.uk/cgi-binbncXML/dlogs.pl?selected=Distribution&thin=0&warned=0&numOfFiles=&view=list&dbname=&SQL=&letter=&phon=0&tag=&ot=&display=word&exclude=&program=search&run=&urlTest=yes'
     qs = parse.urlencode(qs_param)
     url = url + '&' + qs
     # print(url)
@@ -60,6 +63,8 @@ def do_spider(word):
 # 这是程序开始的地方
 if __name__ == '__main__':
     words = [
+        'put something',
+        '9812nnkzxcjk12n50',
         'take place',
         'word',
     ]

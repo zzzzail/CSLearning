@@ -19,6 +19,8 @@ public class RabbitMQUtils {
         factory.setPort(5672);
         factory.setUsername("guest");
         factory.setPassword("guest");
+        // 开启自动重连
+        // factory.setAutomaticRecoveryEnabled(true);
         // 创建 RabbitMQ 的 Channel，使用 Channel 连接 RabbitMQ，为 RabbitMQ 发送消息
         Connection connection = null;
         Channel channel = null;

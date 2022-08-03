@@ -17,13 +17,16 @@ public class SimpleDemo {
     
     public static void main(String[] args) throws NacosException, InterruptedException {
         String serverAddr = "127.0.0.1:8848";
-        String namespace = "dev";          // 命名空间
-        String group = "DEFAULT_GROUP";    // 分组
-        String dataId = "my-app";          // 配置文件名
+        // 命名空间
+        String namespace = "dev";
         Properties properties = new Properties();
         properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
         properties.put(PropertyKeyConst.NAMESPACE, namespace);
         
+        // 分组
+        String group = "DEFAULT_GROUP";
+        // 配置文件名
+        String dataId = "my-app";
         ConfigService configService = NacosFactory.createConfigService(properties);
         String content = configService.getConfig(dataId, group, 5000);
         System.out.println(content);

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <form>
+        <input type="text" name="loginId" value="30000002">
+        <input type="text" name="password" value="2525a9eff3df300df021edaff4c7a205">
+    </form>
+    <button type="button" onclick="submit()">Submit</button>
+
+    <script>
+        function submit() {
+            var data = {
+                reqBody: {
+                    loginId: $('input[name=loginId]').val,
+                    password: $('input[name=password]').val,
+                }
+            }
+            $.ajax({
+                url: 'http://10.188.57.83/api/itmp/authpre/login',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Access-Control-Allow-Origin': '127.0.0.1'
+                    'Host': '10.188.57.83',
+                    'Origin': 'http://10.188.57.83',
+                    'Referer': 'http://10.188.57.83/',
+                },
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(response)
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            })
+        }
+    </script>
+
+</body>
+
+</html>

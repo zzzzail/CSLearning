@@ -10,7 +10,7 @@ import java.util.List;
  * @author zail
  * @date 2022/5/26
  */
-public interface LogDBOperateApi {
+public interface DBLogApi {
     
     /**
      * 新增日志

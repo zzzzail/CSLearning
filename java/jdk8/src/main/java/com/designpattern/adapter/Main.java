@@ -28,7 +28,7 @@ public class Main {
                 .logContent("这是一个测试的日志")
                 .build());
         // 创建日志操作对象
-        LogFileOperator lfo = new LogFileOperator();
+        FileLogApiImpl lfo = new FileLogApiImpl();
         // 将日志写入
         lfo.writeLogFile(logs);
         
@@ -39,8 +39,8 @@ public class Main {
     
     public static void test02() {
         // 创建日志操作对象
-        LogFileOperator lfo = new LogFileOperator();
-        LogDBOperateApi logOperator = new LogOperateAdapter(lfo);
+        FileLogApiImpl lfo = new FileLogApiImpl();
+        DBLogApi logOperator = new DBLogApiAdapter(lfo);
         // 将日志写入
         logOperator.createLog(
                 LogModel.builder()
@@ -54,5 +54,12 @@ public class Main {
         // 读日志
         List<LogModel> readLogs = logOperator.getAllLog();
         System.out.println("读取到的日志: " + readLogs);
+    }
+    
+    public static void test03() {
+        // 使用 FileLogAdapter 就能即使用 LogFileApi 的功能又使用 DBLogApi 的功能
+        DBLogApi dbLogApi = new DBLogApiImpl();
+        FileLogApiAdapter fileLog = new FileLogApiAdapter(dbLogApi);
+        List<LogModel> logs = fileLog.readLogFile();
     }
 }

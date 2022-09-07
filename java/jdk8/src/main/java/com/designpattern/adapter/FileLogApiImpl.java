@@ -1,6 +1,7 @@
 package com.designpattern.adapter;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -9,17 +10,17 @@ import java.util.List;
  * @author zail
  * @date 2022/5/26
  */
-public class LogFileOperator implements LogFileOperateApi {
+public class FileLogApiImpl implements FileLogApi {
     
     private static final String DEFAULT_LOGFILE = "adapter-log.log";
     
     private String logfile;
     
-    public LogFileOperator() {
+    public FileLogApiImpl() {
         this.logfile = DEFAULT_LOGFILE;
     }
     
-    public LogFileOperator(String logfile) {
+    public FileLogApiImpl(String logfile) {
         this.logfile = logfile;
     }
     
@@ -56,7 +57,8 @@ public class LogFileOperator implements LogFileOperateApi {
         File file = new File(this.logfile);
         ObjectOutputStream oout = null;
         try {
-            oout = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            OutputStream os = Files.newOutputStream(file.toPath());
+            oout = new ObjectOutputStream(new BufferedOutputStream(os));
             oout.writeObject(logs);
         }
         catch (IOException e) {
@@ -72,5 +74,10 @@ public class LogFileOperator implements LogFileOperateApi {
                 throw new RuntimeException(e);
             }
         }
+    }
+    
+    @Override
+    public void append(LogModel log) {
+        // 在文件最后追加日志信息
     }
 }

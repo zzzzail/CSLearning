@@ -3,7 +3,13 @@ package com.jdk17;
 public class SealedClassDemo {
     
     public static void main(String[] args) {
+        var a = 100;
+        var str = "xxx";
+        var i = Integer.valueOf(100);
+        System.out.println(a + str + i);
     
+        var app = new Application();
+        System.out.println(app);
     }
     
     static class A {

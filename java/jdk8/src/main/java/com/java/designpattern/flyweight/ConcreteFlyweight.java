@@ -6,15 +6,16 @@ package com.java.designpattern.flyweight;
  */
 public class ConcreteFlyweight implements Flyweight {
     
-    private String intrinsicState;
+    private String state;
     
-    public ConcreteFlyweight(String intrinsicState) {
-        this.intrinsicState = intrinsicState;
+    public ConcreteFlyweight(String state) {
+        this.state = state;
     }
     
     @Override
     public void operation(String extrinsicState) {
         // 具体的处理功能，可能会用到享元内部、外部的状态
+        System.out.println(this.state);
         System.out.println(extrinsicState);
     }
 }

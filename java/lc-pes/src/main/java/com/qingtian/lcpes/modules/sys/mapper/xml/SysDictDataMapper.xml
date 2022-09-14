@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.sys.mapper.SysDictDataMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.sys.entity.SysDictDataEntity">
+        <id column="TYPE_SID" property="typeSid"/>
+        <result column="PARENT_SID" property="parentSid"/>
+        <result column="TYPE_CODE" property="typeCode"/>
+        <result column="TYPE_NAME" property="typeName"/>
+        <result column="TYPE_DESC" property="typeDesc"/>
+        <result column="TYPE_SEQ" property="typeSeq"/>
+        <result column="TYPE_LEVEL" property="typeLevel"/>
+        <result column="BACKUP1" property="backup1"/>
+        <result column="BACKUP2" property="backup2"/>
+        <result column="REMARK" property="remark"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_BY_NAME" property="createdByName"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_BY_NAME" property="updatedByName"/>
+        <result column="VERSION" property="version"/>
+        <result column="COMPANY_SID" property="companySid"/>
+        <result column="COMPANY_CODE" property="companyCode"/>
+        <result column="COMPANY_NAME" property="companyName"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        TYPE_SID, PARENT_SID, TYPE_CODE, TYPE_NAME, TYPE_DESC, TYPE_SEQ, TYPE_LEVEL, BACKUP1, BACKUP2, REMARK,
+        CREATED_BY, CREATED_BY_NAME, CREATED_DT, UPDATED_BY, UPDATED_BY_NAME, VERSION, COMPANY_SID, COMPANY_CODE,
+        COMPANY_NAME, UPDATED_DT
+    </sql>
+
+    <sql id="Base_Column_Tree" >
+        TYPE_SID,
+        PARENT_SID,
+        TYPE_CODE,
+        TYPE_NAME,
+        TYPE_SEQ,
+        TYPE_LEVEL
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap"
+            parameterType="com.qingtian.lcpes.modules.sys.entity.SysDictDataEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM SYS_DICT_DATA
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.typeSid != null">
+                AND TYPE_SID = #{et.typeSid, jdbcType=NUMERIC}
+            </if>
+            <if test="et.parentSid != null">
+                AND PARENT_SID = #{et.parentSid, jdbcType=NUMERIC}
+            </if>
+            <if test="et.typeCode != null">
+                AND TYPE_CODE = #{et.typeCode, jdbcType=VARCHAR}
+            </if>
+            <if test="et.typeName != null">
+                AND TYPE_NAME = #{et.typeName, jdbcType=VARCHAR}
+            </if>
+            <if test="et.typeDesc != null">
+                AND TYPE_DESC = #{et.typeDesc, jdbcType=VARCHAR}
+            </if>
+            <if test="et.typeSeq != null">
+                AND TYPE_SEQ = #{et.typeSeq, jdbcType=NUMERIC}
+            </if>
+            <if test="et.typeLevel != null">
+                AND TYPE_LEVEL = #{et.typeLevel, jdbcType=NUMERIC}
+            </if>
+            <if test="et.backup1 != null">
+                AND BACKUP1 = #{et.backup1, jdbcType=VARCHAR}
+            </if>
+            <if test="et.backup2 != null">
+                AND BACKUP2 = #{et.backup2, jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark != null">
+                AND REMARK = #{et.remark, jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdBy != null">
+                AND CREATED_BY = #{et.createdBy, jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdByName != null">
+                AND CREATED_BY_NAME = #{et.createdByName, jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt, jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedBy != null">
+                AND UPDATED_BY = #{et.updatedBy, jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedByName != null">
+                AND UPDATED_BY_NAME = #{et.updatedByName, jdbcType=VARCHAR}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version, jdbcType=NUMERIC}
+            </if>
+            <if test="et.companySid != null">
+                AND COMPANY_SID = #{et.companySid, jdbcType=VARCHAR}
+            </if>
+            <if test="et.companyCode != null">
+                AND COMPANY_CODE = #{et.companyCode, jdbcType=VARCHAR}
+            </if>
+            <if test="et.companyName != null">
+                AND COMPANY_NAME = #{et.companyName, jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt, jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+
+    <select id="findAllForTree" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_Tree" />
+        from SYS_DICT_DATA
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="typeSid != null" >
+                AND TYPE_SID = #{typeSid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null" >
+                AND PARENT_SID = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="typeCode != null" >
+                AND TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="typeName != null" >
+                AND TYPE_NAME LIKE CONCAT(CONCAT('%', #{typeName}), '%')
+            </if>
+            <if test="typeLevel != null" >
+                AND TYPE_LEVEL = #{typeLevel,jdbcType=INTEGER}
+            </if>
+        </trim>
+        ORDER BY
+        <if test="order != null">
+            ${order}
+        </if>
+        <if test="order == null">
+            TYPE_SID DESC
+        </if>
+    </select>
+
+    <select id="selectMaxTypeSeqByParentSid" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT MAX(TYPE_SEQ) FROM SYS_DICT_DATA WHERE PARENT_SID = #{parentSid}
+    </select>
+
+    <select id="findByList" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        T2.TYPE_SID,
+        T2.PARENT_SID,
+        T2.TYPE_CODE,
+        T2.TYPE_NAME,
+        T2.TYPE_DESC,
+        T2.TYPE_SEQ,
+        T2.TYPE_LEVEL,
+        T2.BACKUP1,
+        T2.BACKUP2,
+        T2.REMARK,
+        T2.CREATED_BY,
+        T2.CREATED_BY_NAME,
+        T2.CREATED_DT,
+        T2.UPDATED_BY,
+        T2.UPDATED_BY_NAME,
+        T2.UPDATED_DT,
+        T2.VERSION
+        FROM
+        SYS_DICT_DATA t1
+        INNER JOIN SYS_DICT_DATA t2 ON t1.TYPE_SID = t2.PARENT_SID
+        WHERE
+        t1.TYPE_CODE = #{typeCode}
+    </select>
+
+    <select id="find" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from SYS_DICT_DATA
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="typeSid != null" >
+                AND TYPE_SID = #{typeSid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null" >
+                AND PARENT_SID = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="typeCode != null" >
+                AND TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="typeName != null" >
+                AND TYPE_NAME LIKE CONCAT(CONCAT('%', #{typeName}), '%')
+            </if>
+            <if test="typeNameEq != null" >
+                AND TYPE_NAME = #{typeNameEq,jdbcType=VARCHAR}
+            </if>
+            <if test="typeLevel != null" >
+                AND TYPE_LEVEL = #{typeLevel,jdbcType=INTEGER}
+            </if>
+            <if test="backup1 != null" >
+                AND BACKUP1  LIKE CONCAT(CONCAT('%',#{backup1}),'%')
+            </if>
+            <if test="backup2 != null" >
+                AND BACKUP2  LIKE CONCAT(CONCAT('%',#{backup2}),'%')
+            </if>
+            <if test="remark != null" >
+                AND REMARK  = #{remark, jdbcType=VARCHAR}
+            </if>
+            <if test="typeCodes != null and typeCodes.size > 0" >
+                AND TYPE_CODE in (
+                <foreach collection="typeCodes" item="code" separator=",">
+                    #{code}
+                </foreach>
+                )
+            </if>
+        </trim>
+        ORDER BY
+        <if test="order != null">
+            ${order}
+        </if>
+        <if test="order == null">
+            parent_sid DESC, type_seq asc
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.sys.mapper.SysLogMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.sys.entity.SysLogEntity">
+        <id column="LOG_ID" property="logId"/>
+        <result column="LOG_TYPE" property="logType"/>
+        <result column="LOG_CONTENT" property="logContent"/>
+        <result column="OPERATE_TYPE" property="operateType"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="IP" property="ip"/>
+        <result column="METHOD" property="method"/>
+        <result column="USER_AGENT" property="userAgent"/>
+        <result column="CLIENT_ID" property="clientId"/>
+        <result column="REQUEST_URL" property="requestUrl"/>
+        <result column="REQUEST_PARAM" property="requestParam"/>
+        <result column="REQUEST_TYPE" property="requestType"/>
+        <result column="OPERATE_RESULT" property="operateResult"/>
+        <result column="COST_TIME" property="costTime"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_BY_NAME" property="createdByName"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_BY_NAME" property="updatedByName"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+        <result column="RESULT_MSG" property="resultMsg"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        LOG_ID, LOG_TYPE, LOG_CONTENT, OPERATE_TYPE, USER_ID, IP, METHOD, USER_AGENT, CLIENT_ID, REQUEST_URL,
+        REQUEST_PARAM, REQUEST_TYPE, OPERATE_RESULT, COST_TIME, CREATED_BY, CREATED_BY_NAME, CREATED_DT, UPDATED_BY,
+        UPDATED_BY_NAME, UPDATED_DT, RESULT_MSG
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap" parameterType="com.qingtian.lcpes.modules.sys.entity.SysLogEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from SYS_LOG
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.logId != null">
+                AND LOG_ID = #{et.logId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.logType != null">
+                AND LOG_TYPE = #{et.logType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.logContent != null">
+                AND LOG_CONTENT = #{et.logContent
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.operateType != null">
+                AND OPERATE_TYPE = #{et.operateType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.userId != null">
+                AND USER_ID = #{et.userId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.ip != null">
+                AND IP = #{et.ip
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.method != null">
+                AND METHOD = #{et.method
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.userAgent != null">
+                AND USER_AGENT = #{et.userAgent
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.clientId != null">
+                AND CLIENT_ID = #{et.clientId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.requestUrl != null">
+                AND REQUEST_URL = #{et.requestUrl
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.requestParam != null">
+                AND REQUEST_PARAM = #{et.requestParam
+                    ,jdbcType=CLOB}
+            </if>
+            <if test="et.requestType != null">
+                AND REQUEST_TYPE = #{et.requestType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.operateResult != null">
+                AND OPERATE_RESULT = #{et.operateResult
+                    ,jdbcType=CLOB}
+            </if>
+            <if test="et.costTime != null">
+                AND COST_TIME = #{et.costTime
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.createdBy != null">
+                AND CREATED_BY = #{et.createdBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdByName != null">
+                AND CREATED_BY_NAME = #{et.createdByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedBy != null">
+                AND UPDATED_BY = #{et.updatedBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedByName != null">
+                AND UPDATED_BY_NAME = #{et.updatedByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.resultMsg != null">
+                AND RESULT_MSG = #{et.resultMsg
+                    ,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+</mapper>

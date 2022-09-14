@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.sys.mapper.CommonNoticeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.sys.entity.CommonNoticeEntity">
+        <id column="SID" property="sid"/>
+        <result column="NOTICE_TYPE" property="noticeType"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result column="SEND_TO" property="sendTo"/>
+        <result column="STATUS" property="status"/>
+        <result column="SEND_TIME" property="sendTime"/>
+        <result column="REMARK" property="remark"/>
+        <result column="REMARK01" property="remark01"/>
+        <result column="REMARK02" property="remark02"/>
+        <result column="REMARK03" property="remark03"/>
+        <result column="REMARK04" property="remark04"/>
+        <result column="REMARK05" property="remark05"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_BY_NAME" property="createdByName"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_BY_NAME" property="updatedByName"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+        <result column="VERSION" property="version"/>
+        <result column="REMOVE_STATUS" property="removeStatus"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SID, NOTICE_TYPE, TITLE, CONTENT, SEND_TO, STATUS, SEND_TIME, REMARK, REMARK01, REMARK02, REMARK03, REMARK04,
+        REMARK05, CREATED_BY, CREATED_BY_NAME, CREATED_DT, UPDATED_BY, UPDATED_BY_NAME, UPDATED_DT, VERSION,
+        REMOVE_STATUS
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap"
+            parameterType="com.qingtian.lcpes.modules.sys.entity.CommonNoticeEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from COMMON_NOTICE
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.noticeType != null">
+                AND NOTICE_TYPE = #{et.noticeType
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.title != null">
+                AND TITLE = #{et.title
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.content != null">
+                AND CONTENT = #{et.content
+                    ,jdbcType=CLOB}
+            </if>
+            <if test="et.sendTo != null">
+                AND SEND_TO = #{et.sendTo
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.status != null">
+                AND STATUS = #{et.status
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.sendTime != null">
+                AND SEND_TIME = #{et.sendTime
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.remark != null">
+                AND REMARK = #{et.remark
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark01 != null">
+                AND REMARK01 = #{et.remark01
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark02 != null">
+                AND REMARK02 = #{et.remark02
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark03 != null">
+                AND REMARK03 = #{et.remark03
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark04 != null">
+                AND REMARK04 = #{et.remark04
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark05 != null">
+                AND REMARK05 = #{et.remark05
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdBy != null">
+                AND CREATED_BY = #{et.createdBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdByName != null">
+                AND CREATED_BY_NAME = #{et.createdByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedBy != null">
+                AND UPDATED_BY = #{et.updatedBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedByName != null">
+                AND UPDATED_BY_NAME = #{et.updatedByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.removeStatus != null">
+                AND REMOVE_STATUS = #{et.removeStatus
+                    ,jdbcType=NUMERIC}
+            </if>
+        </trim>
+    </select>
+
+    <update id="updateBathReadFlag" parameterType="com.qingtian.lcpes.modules.sys.entity.CommonNoticeEntity">
+        UPDATE COMMON_NOTICE
+        SET
+    </update>
+</mapper>

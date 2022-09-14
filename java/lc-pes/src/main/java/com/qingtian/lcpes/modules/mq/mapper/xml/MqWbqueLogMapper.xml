@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.mq.mapper.MqWbqueLogMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.mq.entity.MqWbqueLogEntity">
+        <id column="SID" property="sid"/>
+        <result column="MSG_TYPE_ID" property="msgTypeId"/>
+        <result column="MSG_DT" property="msgDt"/>
+        <result column="MSG_STATUS" property="msgStatus"/>
+        <result column="RETRY_NUM" property="retryNum"/>
+        <result column="NEXT_RETRY_DT" property="nextRetryDt"/>
+        <result column="MSG" property="msg"/>
+        <result column="RESULT" property="result"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_BY_NAME" property="createdByName"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_BY_NAME" property="updatedByName"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+        <result column="VERSION" property="version"/>
+        <result column="REMOVE_STATUS" property="removeStatus"/>
+        <result column="REMARK" property="remark"/>
+        <result column="REMARK01" property="remark01"/>
+        <result column="REMARK02" property="remark02"/>
+        <result column="REMARK03" property="remark03"/>
+        <result column="REMARK04" property="remark04"/>
+        <result column="REMARK05" property="remark05"/>
+        <result column="NEED_RETRY" property="needRetry"/>
+        <result column="QUEUE_NAME" property="queueName"/>
+        <result column="MESSAGE_ID" property="messageId"/>
+        <result column="DL_REASON" property="dlReason"/>
+        <result column="EXCHANGE_NAME" property="exchangeName"/>
+        <result column="RETRY_LAST_TIME" property="retryLastTime"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SID, MSG_TYPE_ID, MSG_DT, MSG_STATUS, RETRY_NUM, NEXT_RETRY_DT, MSG, RESULT, CREATED_BY, CREATED_BY_NAME,
+        CREATED_DT, UPDATED_BY, UPDATED_BY_NAME, UPDATED_DT, VERSION, REMOVE_STATUS, REMARK, REMARK01, REMARK02,
+        REMARK03, REMARK04, REMARK05, NEED_RETRY, QUEUE_NAME, MESSAGE_ID, DL_REASON, EXCHANGE_NAME, RETRY_LAST_TIME
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap"
+            parameterType="com.qingtian.lcpes.modules.mq.entity.MqWbqueLogEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from MQ_WBQUE_LOG
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.msgTypeId != null">
+                AND MSG_TYPE_ID = #{et.msgTypeId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.msgDt != null">
+                AND MSG_DT = #{et.msgDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.msgStatus != null">
+                AND MSG_STATUS = #{et.msgStatus
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.retryNum != null">
+                AND RETRY_NUM = #{et.retryNum
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.nextRetryDt != null">
+                AND NEXT_RETRY_DT = #{et.nextRetryDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.msg != null">
+                AND MSG = #{et.msg
+                    ,jdbcType=CLOB}
+            </if>
+            <if test="et.result != null">
+                AND RESULT = #{et.result
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdBy != null">
+                AND CREATED_BY = #{et.createdBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdByName != null">
+                AND CREATED_BY_NAME = #{et.createdByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedBy != null">
+                AND UPDATED_BY = #{et.updatedBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedByName != null">
+                AND UPDATED_BY_NAME = #{et.updatedByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.removeStatus != null">
+                AND REMOVE_STATUS = #{et.removeStatus
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.remark != null">
+                AND REMARK = #{et.remark
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark01 != null">
+                AND REMARK01 = #{et.remark01
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark02 != null">
+                AND REMARK02 = #{et.remark02
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark03 != null">
+                AND REMARK03 = #{et.remark03
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark04 != null">
+                AND REMARK04 = #{et.remark04
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark05 != null">
+                AND REMARK05 = #{et.remark05
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.needRetry != null">
+                AND NEED_RETRY = #{et.needRetry
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.queueName != null">
+                AND QUEUE_NAME = #{et.queueName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.messageId != null">
+                AND MESSAGE_ID = #{et.messageId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.dlReason != null">
+                AND DL_REASON = #{et.dlReason
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.exchangeName != null">
+                AND EXCHANGE_NAME = #{et.exchangeName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.retryLastTime != null">
+                AND RETRY_LAST_TIME = #{et.retryLastTime
+                    ,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+
+    <select id="findOneByMessageId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM MQ_WBQUE_LOG
+        WHERE MESSAGE_ID = #{messageId}
+    </select>
+
+    <update id="unremove">
+        UPDATE MQ_WBQUE_LOG SET REMOVE_STATUS = 0
+        WHERE SID = #{sid}
+    </update>
+</mapper>

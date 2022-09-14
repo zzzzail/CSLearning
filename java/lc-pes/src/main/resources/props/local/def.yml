@@ -1,0 +1,131 @@
+# 料场 PES 应用配置
+lc-pes:
+  application:
+    name: lc-pes
+  server:
+    port: 10188
+
+# 晴天框架配置
+qingtian:
+  # 数据源
+  datasource:
+    master:
+      url: jdbc:oracle:thin:@//10.188.26.138:1521/lcpes
+      username: lcpes
+      password: Yw89cvC$kTIekIKr
+      driver-class-name: oracle.jdbc.OracleDriver
+    slave:
+      url:
+      username:
+      password:
+  # 缓存
+  cache:
+    enable: true
+    type: Redis
+    redis:
+      host: 10.188.26.137
+      port: 6380
+      password: TN43iH3Z!vQ_cq7I
+  # 消息队列
+  mq:
+    enable: false
+    rabbitmq:
+      enable: false
+      host: 10.188.26.111:5672
+      password: guest
+      username: guest
+      virtualHost: dev_vhost
+      wb2que:
+        queue-name:
+        sender-key: xxx
+      que2wb:
+        queue-name:
+        sender-key: xxx
+      dlx:
+        queue-name: xxx
+    ibm:
+      host: 10.188.26.137
+      port: 1439
+      manager:
+      channel: LCYYT1QM
+      username:
+      password:
+      receive-timeout: 3000
+
+  web:
+    security:
+      enable: false
+      csrf:
+        enable: false
+      cors:
+        enable: false
+      form-login:
+        enable: false
+      # 需要安全认证的连接
+      authenticated-urls: /**, /api/**
+      # 不需要安全认证的连接
+      unauthenticated-urls:
+        - /
+        - /index
+        - /login
+        - /api/login
+        - /authentication/require
+        - /validationCode/image
+        - /logout
+        - /access/denied
+        - /my/authentication/require
+        - /itmp/authpre/login
+        - /api/itmp/authpre/login
+      # 自定义认证连接
+      require-authentication-url: /my/authentication/require
+      jwt:
+        enable: true
+        http-header-name: AuthUserToken
+        secret: '#@wJgVSMv:Dv9kxo0q/YwNW^.knmm.,CgI?@wtjrDKSFw3\g!nfECaf-6]S-#Sf~'
+        token-head: ''
+  # 日志配置
+  log:
+    config:
+      file: classpath:props/local/logback.xml
+  auth:
+    # 认证平台地址
+    address: http://10.188.26.111/ssl
+    # 认证平台 Token
+    token: NO
+
+# log4j 日志配置
+log4j:
+  config:
+    path: classpath:props/local/logback.xml
+
+# Spring 应用管理配置
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    rabbit:
+      enabled: false
+
+server:
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
+
+# Spring 配置
+spring:
+  datasource:
+    dynamic:
+      # 开启 p6spy 打印 sql
+      p6spy: true
+  servlet:
+    multipart:
+      maxFileSize: 500MB
+      maxRequestSize: 500MB

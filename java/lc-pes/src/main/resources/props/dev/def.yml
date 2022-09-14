@@ -1,0 +1,89 @@
+# 料场 PES 应用配置
+lc-pes:
+  application:
+    name: lc-pes
+  server:
+    port: 10188
+
+# 晴天框架配置
+qingtian:
+  # 数据源
+  datasource:
+    master:
+      url: jdbc:oracle:thin:@//10.188.26.138:1521/lc00dbd
+      username: system
+      password: BPDfUeJTVaEexFJv
+      driver-class-name: oracle.jdbc.OracleDriver
+    slave:
+      url:
+      username:
+      password:
+  # 缓存
+  cache:
+    enable: true
+    type: Redis
+    redis:
+      host: 10.188.26.111
+      port: 6380
+      password:
+      username:
+      database: 0
+      ssl: false
+      cluster:
+        nodes: 10.188.26.112:6380,10.188.26.112:6381,10.188.26.113:6382,10.188.26.113:6383,10.188.26.114:6384,10.188.26.114:6385
+  # 消息队列
+  mq:
+    enable: true
+    type: RabbitMQ
+    rabbitmq:
+      host: 10.188.26.111:5672
+      password: guest
+      username: guest
+      virtualHost: dev_vhost
+  # 日志平台
+  alertlog:
+    enable: false
+    env: local
+    host: 10.188.26.111:6380
+    model: redis
+    password: Redis@itmp
+    trace:
+      enable: false
+  # 认证平台
+  auth:
+    address: http://10.88.246.110:9001
+    datasource:
+      password: GwGpKFCTfM9XonGx
+      url: jdbc:oracle:thin:@//10.188.26.115:1521/zhwldbt
+      username: itmp
+    token:
+      val: 'NO'
+
+# log4j 日志配置
+log4j:
+  config:
+    path: classpath:props/local/logback.xml
+
+# Spring 应用管理配置
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    rabbit:
+      enabled: false
+
+# 关闭 CSRF
+csrf:
+  enabled: false
+
+# Spring 配置
+spring:
+  servlet:
+    multipart:
+      maxFileSize: 500MB
+      maxRequestSize: 500MB

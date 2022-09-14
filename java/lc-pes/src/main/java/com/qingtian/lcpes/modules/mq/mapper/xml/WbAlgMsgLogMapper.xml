@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.mq.mapper.WbAlgMsgLogMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.mq.entity.WbAlgMsgLogEntity">
+        <id column="SID" property="sid"/>
+        <result column="MSG_API" property="msgApi"/>
+        <result column="MSG_DT" property="msgDt"/>
+        <result column="MSG_STATUS" property="msgStatus"/>
+        <result column="RETRY_NUM" property="retryNum"/>
+        <result column="NEXT_RETRY_DT" property="nextRetryDt"/>
+        <result column="MSG" property="msg"/>
+        <result column="RESULT" property="result"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_BY_NAME" property="createdByName"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_BY_NAME" property="updatedByName"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+        <result column="VERSION" property="version"/>
+        <result column="REMOVE_STATUS" property="removeStatus"/>
+        <result column="REMARK" property="remark"/>
+        <result column="REMARK01" property="remark01"/>
+        <result column="REMARK02" property="remark02"/>
+        <result column="REMARK03" property="remark03"/>
+        <result column="REMARK04" property="remark04"/>
+        <result column="REMARK05" property="remark05"/>
+        <result column="NEED_RETRY" property="needRetry"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SID, MSG_API, MSG_DT, MSG_STATUS, RETRY_NUM, NEXT_RETRY_DT, MSG, RESULT, CREATED_BY, CREATED_BY_NAME,
+        CREATED_DT, UPDATED_BY, UPDATED_BY_NAME, UPDATED_DT, VERSION, REMOVE_STATUS, REMARK, REMARK01, REMARK02,
+        REMARK03, REMARK04, REMARK05, NEED_RETRY
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap"
+            parameterType="com.qingtian.lcpes.modules.mq.entity.WbAlgMsgLogEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from WB_ALG_MSG_LOG
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.msgApi != null">
+                AND MSG_API = #{et.msgApi
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.msgDt != null">
+                AND MSG_DT = #{et.msgDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.msgStatus != null">
+                AND MSG_STATUS = #{et.msgStatus
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.retryNum != null">
+                AND RETRY_NUM = #{et.retryNum
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.nextRetryDt != null">
+                AND NEXT_RETRY_DT = #{et.nextRetryDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.msg != null">
+                AND MSG = #{et.msg
+                    ,jdbcType=CLOB}
+            </if>
+            <if test="et.result != null">
+                AND RESULT = #{et.result
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdBy != null">
+                AND CREATED_BY = #{et.createdBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdByName != null">
+                AND CREATED_BY_NAME = #{et.createdByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedBy != null">
+                AND UPDATED_BY = #{et.updatedBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedByName != null">
+                AND UPDATED_BY_NAME = #{et.updatedByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.removeStatus != null">
+                AND REMOVE_STATUS = #{et.removeStatus
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.remark != null">
+                AND REMARK = #{et.remark
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark01 != null">
+                AND REMARK01 = #{et.remark01
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark02 != null">
+                AND REMARK02 = #{et.remark02
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark03 != null">
+                AND REMARK03 = #{et.remark03
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark04 != null">
+                AND REMARK04 = #{et.remark04
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark05 != null">
+                AND REMARK05 = #{et.remark05
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.needRetry != null">
+                AND NEED_RETRY = #{et.needRetry
+                    ,jdbcType=NUMERIC}
+            </if>
+        </trim>
+    </select>
+
+    <select id="pageByParams"
+            parameterType="java.util.Map"
+            resultType="com.qingtian.lcpes.modules.mq.vo.WbAlgMsgLogVO">
+        select SID, MSG_API, MSG, MSG_DT, MSG_STATUS, RETRY_NUM, NEXT_RETRY_DT, RESULT, NEED_RETRY,REMOVE_STATUS,REMARK
+        from WB_ALG_MSG_LOG
+        <where>
+            <if test="cm.msgDtMin != null">
+                AND MSG_DT &gt;= TO_DATE(#{cm.msgDtMin},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+            <if test="cm.msgDtMax != null">
+                AND MSG_DT &lt;= TO_DATE(#{cm.msgDtMax},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+            <if test="cm.msgApi != null" >
+                AND MSG_API = #{cm.msgApi,jdbcType=VARCHAR}
+            </if>
+            <if test="cm.msgStatus != null" >
+                AND MSG_STATUS = #{cm.msgStatus,jdbcType=NUMERIC}
+            </if>
+            <if test="cm.removeStatus != null" >
+                AND REMOVE_STATUS = #{cm.removeStatus,jdbcType=NUMERIC}
+            </if>
+            <if test="cm.needRetry != null" >
+                AND NEED_RETRY = #{cm.needRetry,jdbcType=NUMERIC}
+            </if>
+            <if test="cm.msgStatuss != null and cm.msgStatuss.size > 0">
+                AND MSG_STATUS IN
+                <foreach collection="cm.msgStatuss" separator="," open="(" close=")" item="item">
+                    #{item,jdbcType=NUMERIC}
+                </foreach>
+            </if>
+            <if test="cm.msg != null">
+                <bind name="msg" value="'%'+cm.msg+'%'"/>
+                AND MSG like #{msg,jdbcType=VARCHAR}
+            </if>
+            <if test="cm.result != null">
+                <bind name="result" value="'%'+cm.result+'%'"/>
+                AND RESULT like #{result,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY SID DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.authpre.mapper.AcOrgnizationMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.authpre.entity.AcOrgnizationEntity">
+        <id column="ORG_ID" property="orgId"/>
+        <result column="SID" property="sid"/>
+        <result column="PARENT_SID" property="parentSid"/>
+        <result column="PARENT_ORG_ID" property="parentOrgId"/>
+        <result column="ORG_FULL_NAME" property="orgFullName"/>
+        <result column="ORG_SHORT_NAME" property="orgShortName"/>
+        <result column="ORG_SEQ" property="orgSeq"/>
+        <result column="ORG_LEVEL" property="orgLevel"/>
+        <result column="VERSION" property="version"/>
+        <result column="ORG_FLAG" property="orgFlag"/>
+        <result column="DATA_TYPE" property="dataType"/>
+        <result column="ORG_TYPE" property="orgType"/>
+        <result column="ORG_Flag" property="orgFlag"/>
+        <result column="COMPANY_CODE" property="companyCode"/>
+        <result column="ORG_SHORT_NAME2" property="orgShortName2"/>
+        <result column="CX_ORG_ID" property="cxOrgId"/>
+        <result column="MD_ORG_ID" property="mdOrgId"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+                CREATED_BY,
+                CREATED_DT,
+                UPDATED_BY,
+                UPDATED_DT,
+            SID, PARENT_SID, PARENT_ORG_ID, ORG_ID, ORG_FULL_NAME, ORG_SHORT_NAME, ORG_SEQ, ORG_LEVEL, VERSION, DATA_TYPE, ORG_TYPE, COMPANY_CODE, ORG_SHORT_NAME2, CX_ORG_ID, MD_ORG_ID
+        </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap"
+            parameterType="com.qingtian.lcpes.modules.authpre.entity.AcOrgnizationEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from SADP_AC_ORGNIZATION
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.parentSid != null">
+                AND PARENT_SID = #{et.parentSid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.parentOrgId != null">
+                AND PARENT_ORG_ID = #{et.parentOrgId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgId != null">
+                AND ORG_ID = #{et.orgId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgFullName != null">
+                AND ORG_FULL_NAME = #{et.orgFullName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgShortName != null">
+                AND ORG_SHORT_NAME = #{et.orgShortName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgSeq != null">
+                AND ORG_SEQ = #{et.orgSeq
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.orgLevel != null">
+                AND ORG_LEVEL = #{et.orgLevel
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.orgFlag != null">
+                AND ORG_FLAG = #{et.orgFlag,jdbcType=NUMERIC}
+            </if>
+            <if test="et.dataType != null">
+                AND DATA_TYPE = #{et.dataType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgType != null">
+                AND ORG_TYPE = #{et.orgType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.companyCode != null">
+                AND COMPANY_CODE = #{et.companyCode
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgShortName2 != null">
+                AND ORG_SHORT_NAME2 = #{et.orgShortName2
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.cxOrgId != null">
+                AND CX_ORG_ID = #{et.cxOrgId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.mdOrgId != null">
+                AND MD_ORG_ID = #{et.mdOrgId
+                    ,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+
+
+    <resultMap id="NodeTreeResult"
+               type="com.qingtian.lcpes.modules.authpre.entity.AcOrgnizationEntity"
+               extends="BaseResultMap">
+        <collection property="childNode"
+                    column="sid"
+                    ofType="com.qingtian.lcpes.modules.authpre.entity.AcOrgnizationEntity"
+                    javaType="java.util.ArrayList" select="nextNoteTree">
+        </collection>
+    </resultMap>
+
+    <!--查询京唐地区组织机构树-->
+    <select id="nextNoteTree" resultMap="NodeTreeResult">
+        SELECT  g.sid,
+                g.parent_sid,
+                g.org_flag,
+                g.org_full_name,
+                g.org_level,
+                g.org_id
+        FROM sadp_ac_orgnization g
+        where g.parent_sid = #{sid,jdbcType=NUMERIC}
+    </select>
+    <select id="findOrgTree" resultMap="NodeTreeResult" parameterType="java.util.Map">
+        SELECT  g.sid,
+                g.parent_sid,
+                g.org_flag,
+                g.org_full_name,
+                g.org_level,
+                g.org_id
+        FROM sadp_ac_orgnization g
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="orgFullName != null and orgFullName != ''">
+                AND g.ORG_FULL_NAME like CONCAT(CONCAT('%', #{orgFullName}), '%')
+            </if>
+            <if test="parentSid!= null and parentSid != ''">
+                AND g.parent_sid = #{parentSid,jdbcType=NUMERIC}
+            </if>
+            <if test="orgId!= null and orgId != ''">
+                AND g.org_id = #{orgId,jdbcType=VARCHAR}
+            </if>
+        </trim>
+
+
+        <!--START WITH g.org_full_name = '京唐属地化'
+        CONNECT BY PRIOR sid = parent_sid
+        order by parent_sid asc, sid asc-->
+    </select>
+
+
+    <update id = "updateOrgFlag" parameterType ="com.qingtian.lcpes.modules.authpre.entity.AcOrgnizationEntity">
+        update sadp_ac_orgnization
+        set org_flag =  #{orgFlag,jdbcType=NUMERIC}
+        where sid = #{sid}
+    </update>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.authpre.mapper.AuthGroupMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.authpre.entity.AcGroupEntity">
+        <id column="SID" property="sid"/>
+        <result column="GROUP_ID" property="groupId"/>
+        <result column="GROUP_NAME" property="groupName"/>
+        <result column="GROUP_DESC" property="groupDesc"/>
+        <result column="ORG_SID" property="orgSid"/>
+        <result column="VERSION" property="version"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+                CREATED_BY,
+                CREATED_DT,
+                UPDATED_BY,
+                UPDATED_DT,
+            SID, GROUP_ID, GROUP_NAME, GROUP_DESC, ORG_SID, VERSION
+        </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap"
+            parameterType="com.qingtian.lcpes.modules.authpre.entity.AcGroupEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from SADP_AC_GROUP
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.groupId != null">
+                AND GROUP_ID = #{et.groupId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.groupName != null">
+                AND GROUP_NAME = #{et.groupName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.groupDesc != null">
+                AND GROUP_DESC = #{et.groupDesc
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgSid != null">
+                AND ORG_SID = #{et.orgSid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version
+                    ,jdbcType=NUMERIC}
+            </if>
+        </trim>
+    </select>
+</mapper>

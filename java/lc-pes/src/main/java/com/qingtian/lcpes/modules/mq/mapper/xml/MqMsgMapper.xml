@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.mq.mapper.MqMsgMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.mq.entity.MqMsgEntity">
+        <id column="SID" property="sid"/>
+        <result column="MSG_ID" property="msgId"/>
+        <result column="MESSAGE_ID" property="messageId"/>
+        <result column="SEND_DT" property="sendDt"/>
+        <result column="RECEIVE_DT" property="receiveDt"/>
+        <result column="MSG" property="msg"/>
+        <result column="MSG_STATE" property="msgState"/>
+        <result column="MSG_NUM" property="msgNum"/>
+        <result column="RETRY_DT" property="retryDt"/>
+        <result column="REMARK_03" property="remark03"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_BY_NAME" property="createdByName"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_BY_NAME" property="updatedByName"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+        <result column="VERSION" property="version"/>
+        <result column="EXCEPTION" property="exception"/>
+        <result column="MSG_NAME" property="msgName"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SID, MSG_ID, MESSAGE_ID, SEND_DT, RECEIVE_DT, MSG, MSG_STATE, MSG_NUM, RETRY_DT, REMARK_03, CREATED_BY,
+        CREATED_BY_NAME, CREATED_DT, UPDATED_BY, UPDATED_BY_NAME, UPDATED_DT, VERSION, EXCEPTION, MSG_NAME
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap" parameterType="com.qingtian.lcpes.modules.mq.entity.MqMsgEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM MQ_MSG
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid,jdbcType=NUMERIC}
+            </if>
+            <if test="et.msgId != null">
+                AND MSG_ID = #{et.msgId,jdbcType=VARCHAR}
+            </if>
+            <if test="et.messageId != null">
+                AND MESSAGE_ID = #{et.messageId,jdbcType=VARCHAR}
+            </if>
+            <if test="et.sendDt != null">
+                AND SEND_DT = #{et.sendDt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.receiveDt != null">
+                AND RECEIVE_DT = #{et.receiveDt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.msg != null">
+                AND MSG = #{et.msg,jdbcType=CLOB}
+            </if>
+            <if test="et.msgState != null">
+                AND MSG_STATE = #{et.msgState,jdbcType=NUMERIC}
+            </if>
+            <if test="et.msgNum != null">
+                AND MSG_NUM = #{et.msgNum,jdbcType=NUMERIC}
+            </if>
+            <if test="et.retryDt != null">
+                AND RETRY_DT = #{et.retryDt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.remark03 != null">
+                AND REMARK_03 = #{et.remark03,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdBy != null">
+                AND CREATED_BY = #{et.createdBy,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdByName != null">
+                AND CREATED_BY_NAME = #{et.createdByName,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedBy != null">
+                AND UPDATED_BY = #{et.updatedBy,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedByName != null">
+                AND UPDATED_BY_NAME = #{et.updatedByName,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version,jdbcType=NUMERIC}
+            </if>
+            <if test="et.exception != null">
+                AND EXCEPTION = #{et.exception,jdbcType=CLOB}
+            </if>
+            <if test="et.msgName != null">
+                AND MSG_NAME = #{et.msgName,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+
+    <select id="countByBO" resultType="com.qingtian.lcpes.modules.mq.vo.MsgStatCountVO">
+        SELECT
+        M1.MSG_STATE msgState,
+        M1.MSG_SENDER msgSender,
+        M1.MSG_RECEIVE msgReceiver,
+        M1.DATE_NUM dateNum,
+        COUNT(M1.SID) "count"
+        FROM (
+        SELECT
+        M.SID SID,
+        M.MSG_STATE MSG_STATE,
+        C.MSG_SENDER MSG_SENDER,
+        C.MSG_RECEIVE MSG_RECEIVE,
+        TO_CHAR(M.SEND_DT, '${bo.dateNumFormatPattern}') DATE_NUM
+        FROM MQ_MSG M
+        LEFT JOIN MQ_CONFIG C ON C.MSG_ID = M.MSG_ID
+        WHERE
+        M.SEND_DT BETWEEN #{bo.startTime, jdbcType=TIMESTAMP} AND #{bo.endTime, jdbcType=TIMESTAMP}
+        ) M1
+        GROUP BY M1.MSG_STATE, M1.MSG_SENDER, M1.MSG_RECEIVE, M1.DATE_NUM
+        ORDER BY DATE_NUM ASC
+    </select>
+
+    <select id="countMsgNumByBO" resultType="java.lang.Long">
+        SELECT COUNT(SID) FROM MQ_MSG
+        <where>
+            <if test="bo.startTime != null"><![CDATA[ AND SEND_DT >= #{bo.startTime, jdbcType=TIMESTAMP} ]]></if>
+            <if test="bo.endTime != null"><![CDATA[ AND SEND_DT <= #{bo.endTime, jdbcType=TIMESTAMP} ]]></if>
+            <if test="bo.msgState != null"> AND MSG_STATE = #{bo.msgState, jdbcType=NUMERIC}</if>
+        </where>
+    </select>
+</mapper>

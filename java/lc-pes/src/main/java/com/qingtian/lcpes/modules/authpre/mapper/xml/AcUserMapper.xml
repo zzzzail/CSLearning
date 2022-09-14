@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.authpre.mapper.AcUserMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.authpre.entity.AcUserEntity">
+        <id column="SID" property="sid"/>
+        <result column="LOGIN_ID" property="loginId"/>
+        <result column="USER_FULL_NAME_PY" property="userFullNamePy"/>
+        <result column="USER_NAME_CN" property="userNameCn"/>
+        <result column="USER_TYPE" property="userType"/>
+        <result column="IDENTITY_ID" property="identityId"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ORG_SID" property="orgSid"/>
+        <result column="USER_DUTY" property="userDuty"/>
+        <result column="USER_POST_SID" property="userPostSid"/>
+        <!--岗位ID-->
+        <result column="USER_POST_ID" property="userPostId"/>
+        <result column="USER_POST_NAME" property="userPostName"/>
+        <result column="EMAIL_ADDR" property="emailAddr"/>
+        <result column="MOBILE_PHONE" property="mobilePhone"/>
+        <result column="SEX" property="sex"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="VALID_FLAG" property="validFlag"/>
+        <result column="DATA_TYPE" property="dataType"/>
+        <result column="SHIFT_ID" property="shiftId"/>
+        <result column="GROUP_ID" property="groupId"/>
+        <result column="THEME_TYPE" property="themeType"/>
+        <result column="VERSION" property="version"/>
+        <result column="LEVEL_CODE" property="levelCode"/>
+        <result column="LEVEL_NAME" property="levelName"/>
+        <result column="IDENTITY_FLAG" property="identityFlag"/>
+        <result column="IDENTITY_DT" property="identityDt"/>
+        <result column="VALID_DT" property="validDt"/>
+        <result column="FROM_FLAG" property="fromFlag"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+        <result column="PORG_NAME" property="pOrgName"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+                CREATED_BY,
+                CREATED_DT,
+                UPDATED_BY,
+                UPDATED_DT,USER_POST_ID,
+            SID, LOGIN_ID, USER_FULL_NAME_PY, USER_NAME_CN, USER_TYPE, IDENTITY_ID, ORG_ID, ORG_SID, USER_DUTY, USER_POST_SID, USER_POST_NAME, EMAIL_ADDR, MOBILE_PHONE, SEX, PASSWORD, VALID_FLAG, DATA_TYPE, SHIFT_ID, GROUP_ID, THEME_TYPE, VERSION, LEVEL_CODE, LEVEL_NAME, IDENTITY_FLAG, IDENTITY_DT, VALID_DT, FROM_FLAG
+     </sql>
+
+
+    <!--获取权限库的岗位ID、组织机构ID-->
+    <select id="getUserEx" resultType="com.qingtian.lcpes.modules.authpre.entity.AcUserEntity"
+            parameterType="java.lang.String">
+         select u.LOGIN_ID, p.group_id as USER_POST_ID, g.ORG_ID
+              from sadp_ac_user u, sadp_ac_group p, sadp_ac_orgnization g
+             where u.user_post_sid = p.sid
+               and g.sid = u.org_sid
+           and u.login_id = #{loginId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="listByPage" resultMap="BaseResultMap"
+            parameterType="com.qingtian.lcpes.modules.authpre.entity.AcUserEntity">
+        SELECT
+        <include refid="Base_Column_List"/>,FUN_GET_PORG_NAME(ORG_ID) as PORG_NAME
+        from SADP_AC_USER
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.loginId != null">
+                AND LOGIN_ID like CONCAT(CONCAT('%', #{et.loginId}), '%')
+            </if>
+            <if test="et.userFullNamePy != null">
+                AND USER_FULL_NAME_PY = #{et.userFullNamePy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.userNameCn != null">
+                AND USER_NAME_CN like CONCAT(CONCAT('%', #{et.userNameCn}), '%')
+            </if>
+            <if test="et.userType != null">
+                AND USER_TYPE = #{et.userType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.identityId != null">
+                AND IDENTITY_ID = #{et.identityId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgId != null">
+                AND ORG_ID = #{et.orgId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.orgSid != null">
+                AND ORG_SID = #{et.orgSid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.userDuty != null">
+                AND USER_DUTY = #{et.userDuty
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.userPostSid != null">
+                AND USER_POST_SID = #{et.userPostSid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.userPostName != null">
+                AND USER_POST_NAME = #{et.userPostName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.emailAddr != null">
+                AND EMAIL_ADDR = #{et.emailAddr
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.mobilePhone != null">
+                AND MOBILE_PHONE = #{et.mobilePhone
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.sex != null">
+                AND SEX = #{et.sex
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.password != null">
+                AND PASSWORD = #{et.password
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.validFlag != null">
+                AND VALID_FLAG = #{et.validFlag
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.dataType != null">
+                AND DATA_TYPE = #{et.dataType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.shiftId != null">
+                AND SHIFT_ID = #{et.shiftId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.groupId != null">
+                AND GROUP_ID = #{et.groupId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.themeType != null">
+                AND THEME_TYPE = #{et.themeType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.levelCode != null">
+                AND LEVEL_CODE = #{et.levelCode
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.levelName != null">
+                AND LEVEL_NAME = #{et.levelName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.identityFlag != null">
+                AND IDENTITY_FLAG = #{et.identityFlag
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.identityDt != null">
+                AND IDENTITY_DT = #{et.identityDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.validDt != null">
+                AND VALID_DT = #{et.validDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.fromFlag != null">
+                AND FROM_FLAG = #{et.fromFlag
+                    ,jdbcType=VARCHAR}
+            </if>
+            <!--<if test="et.testBizWarehouseSids != null">
+                AND FROM_FLAG in (#{et.testBizWarehouseSids,jdbcType=VARCHAR})
+            </if>-->
+
+        </trim>
+    </select>
+
+
+    <select id="getBizWarehouseSids" resultType="java.lang.String" parameterType="java.lang.String">
+        select FUN_GET_BIZ_WAREHOUSE(#{loginId,jdbcType=VARCHAR}) from dual
+    </select>
+
+    <select id="getBizLocationSids" resultType="java.lang.String" parameterType="java.lang.String">
+        select FUN_GET_BIZ_LOCATION(#{loginId,jdbcType=VARCHAR}) from dual
+    </select>
+
+    <select id="getBizFleetSids" resultType="java.lang.String" parameterType="java.lang.String">
+        select FUN_GET_BIZ_FLEET(#{loginId,jdbcType=VARCHAR}) from dual
+    </select>
+
+    <select id="getBizPOrgSids" resultType="java.lang.String" parameterType="java.lang.String">
+        select FUN_GET_BIZ_PORG(#{loginId,jdbcType=VARCHAR}) from dual
+    </select>
+
+    <select id="getBizWorkItemSids" resultType="java.lang.String" parameterType="java.lang.String">
+        select FUN_GET_BIZ_WORKITEM(#{loginId,jdbcType=VARCHAR}) from dual
+    </select>
+
+    <select id="getBizTaskTypes" resultType="java.lang.String" parameterType="java.lang.String">
+        select FUN_GET_BIZ_TASK(#{loginId,jdbcType=VARCHAR}) from dual
+    </select>
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.mq.mapper.MqConfigMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.mq.entity.MqConfigEntity">
+        <id column="SID" property="sid"/>
+        <result column="MSG_ID" property="msgId"/>
+        <result column="MSG_NAME" property="msgName"/>
+        <result column="MSG_TYPE" property="msgType"/>
+        <result column="MSG_SENDER" property="msgSender"/>
+        <result column="MSG_RECEIVE" property="msgReceive"/>
+        <result column="QUEUE" property="queue"/>
+        <result column="SERVICE_ID" property="serviceId"/>
+        <result column="URI" property="uri"/>
+        <result column="CLASS_NAME" property="className"/>
+        <result column="POLICE" property="police"/>
+        <result column="HOOK_ADDRESS" property="hookAddress"/>
+        <result column="REMARK_01" property="remark01"/>
+        <result column="REMARK_02" property="remark02"/>
+        <result column="REMARK_03" property="remark03"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="CREATED_BY_NAME" property="createdByName"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="UPDATED_BY_NAME" property="updatedByName"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+        <result column="VERSION" property="version"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SID, MSG_ID, MSG_NAME, MSG_TYPE, MSG_SENDER, MSG_RECEIVE, QUEUE, SERVICE_ID, URI, CLASS_NAME, POLICE,
+        HOOK_ADDRESS, REMARK_01, REMARK_02, REMARK_03, CREATED_BY, CREATED_BY_NAME, CREATED_DT, UPDATED_BY,
+        UPDATED_BY_NAME, UPDATED_DT, VERSION
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap" parameterType="com.qingtian.lcpes.modules.mq.entity.MqConfigEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from MQ_CONFIG
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.msgId != null">
+                AND MSG_ID = #{et.msgId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.msgName != null">
+                AND MSG_NAME = #{et.msgName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.msgType != null">
+                AND MSG_TYPE = #{et.msgType
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.msgSender != null">
+                AND MSG_SENDER = #{et.msgSender
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.msgReceive != null">
+                AND MSG_RECEIVE = #{et.msgReceive
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.queue != null">
+                AND QUEUE = #{et.queue
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.serviceId != null">
+                AND SERVICE_ID = #{et.serviceId
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.uri != null">
+                AND URI = #{et.uri
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.className != null">
+                AND CLASS_NAME = #{et.className
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.police != null">
+                AND POLICE = #{et.police
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.hookAddress != null">
+                AND HOOK_ADDRESS = #{et.hookAddress
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark01 != null">
+                AND REMARK_01 = #{et.remark01
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark02 != null">
+                AND REMARK_02 = #{et.remark02
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.remark03 != null">
+                AND REMARK_03 = #{et.remark03
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdBy != null">
+                AND CREATED_BY = #{et.createdBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdByName != null">
+                AND CREATED_BY_NAME = #{et.createdByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedBy != null">
+                AND UPDATED_BY = #{et.updatedBy
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedByName != null">
+                AND UPDATED_BY_NAME = #{et.updatedByName
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.version != null">
+                AND VERSION = #{et.version
+                    ,jdbcType=NUMERIC}
+            </if>
+        </trim>
+    </select>
+</mapper>

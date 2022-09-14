@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingtian.lcpes.modules.mq.mapper.MsgStatMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qingtian.lcpes.modules.mq.entity.MsgStatEntity">
+        <id column="SID" property="sid"/>
+        <result column="PLATFORM_TYPE" property="platformType"/>
+        <result column="STATISTICS_TYPE" property="statisticsType"/>
+        <result column="MESSAGE_STATUS" property="messageStatus"/>
+        <result column="DATE_NUM" property="dateNum"/>
+        <result column="NUM" property="num"/>
+        <result column="CREATED_DT" property="createdDt"/>
+        <result column="UPDATED_DT" property="updatedDt"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SID, PLATFORM_TYPE, STATISTICS_TYPE, MESSAGE_STATUS, DATE_NUM, NUM, CREATED_DT, UPDATED_DT
+    </sql>
+
+    <select id="listByPage" resultMap="BaseResultMap" parameterType="com.qingtian.lcpes.modules.mq.entity.MsgStatEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from MSG_STAT
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="et.sid != null">
+                AND SID = #{et.sid
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.platformType != null">
+                AND PLATFORM_TYPE = #{et.platformType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.statisticsType != null">
+                AND STATISTICS_TYPE = #{et.statisticsType
+                    ,jdbcType=VARCHAR}
+            </if>
+            <if test="et.messageStatus != null">
+                AND MESSAGE_STATUS = #{et.messageStatus
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.dateNum != null">
+                AND DATE_NUM = #{et.dateNum
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.num != null">
+                AND NUM = #{et.num
+                    ,jdbcType=NUMERIC}
+            </if>
+            <if test="et.createdDt != null">
+                AND CREATED_DT = #{et.createdDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="et.updatedDt != null">
+                AND UPDATED_DT = #{et.updatedDt
+                    ,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+
+    <select id="sumNumByPlatformType" resultType="java.lang.Long">
+        SELECT SUM(M.NUM) FROM MSG_STAT M
+        <where>
+            <if test="platformType != null">
+                AND M.PLATFORM_TYPE = #{platformType, jdbcType=VARCHAR}
+            </if>
+            <if test="messageStatus != null">
+                AND M.MESSAGE_STATUS = #{messageStatus, jdbcType=NUMERIC}
+            </if>
+            <if test="dateNumBegin != null"><![CDATA[
+                AND M.DATE_NUM >= #{dateNumBegin, jdbcType=NUMERIC}
+            ]]></if>
+            <if test="dateNumEnd != null"><![CDATA[
+                AND M.DATE_NUM <= #{dateNumEnd, jdbcType=NUMERIC}
+            ]]></if>
+        </where>
+    </select>
+
+    <select id="listBy4Params" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM MSG_STAT
+        <where>
+            <foreach collection="list" item="itm" open="(" close=")" separator=" ) OR ( ">
+                PLATFORM_TYPE = #{itm.platformType, jdbcType=VARCHAR}
+                AND STATISTICS_TYPE = #{itm.statisticsType, jdbcType=VARCHAR}
+                AND MESSAGE_STATUS = #{itm.messageStatus, jdbcType=NUMERIC}
+                AND DATE_NUM = #{itm.dateNum, jdbcType=NUMERIC}
+            </foreach>
+        </where>
+    </select>
+</mapper>

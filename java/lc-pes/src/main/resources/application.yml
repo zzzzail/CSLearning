@@ -1,0 +1,58 @@
+server:
+  port: ${lc-pes.server.port:8080}
+
+logging:
+  config: ${log4j.config.path}
+
+mybatis-plus:
+  mapper-locations: classpath*:com/**/mapper/**/xml/*.xml
+  configuration:
+    jdbc-type-for-null: 'null'
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+
+spring:
+  main:
+    # 关闭 spring 的 banner
+    banner-mode: off
+    allow-bean-definition-overriding: true
+  application:
+    name: ${lc-pes.application.name}
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+    dynamic:
+      datasource:
+        master:
+          url: ${qingtian.datasource.master.url}
+          username: ${qingtian.datasource.master.username}
+          password: ${qingtian.datasource.master.password}
+          driver-class-name: ${qingtian.datasource.master.driver-class-name}
+      druid:
+        initial-size: 20
+        max-active: 100
+        max-wait: 1000
+        min-idle: 20
+        validation-query: 'select 1 from dual'
+  mvc:
+    static-path-pattern: /**
+    view:
+      prefix: classpath:/templates
+      suffix: .html
+  thymeleaf:
+    mode: HTML
+  # Redis 配置
+  redis:
+    host: ${qingtian.cache.redis.host}
+    port: ${qingtian.cache.redis.port}
+    password: ${qingtian.cache.redis.password}
+    database: 0
+    ssl: false
+
+itmp:
+  sysNo: ^1125.*|^TMS.*|^S1125.*
+  sysName: \u667A\u6167\u7269\u6D41\u5E73\u53F0

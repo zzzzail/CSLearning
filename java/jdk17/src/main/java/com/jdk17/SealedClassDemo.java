@@ -10,6 +10,8 @@ public class SealedClassDemo {
     
         var app = new Application();
         System.out.println(app);
+    
+        int[] matrix[] = new int[2][10];
     }
     
     static class A {

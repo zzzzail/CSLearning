@@ -18,6 +18,9 @@ public class Main {
         list.add(u1);
         list.add(u2);
         list.add(u3);
+    
+        String str = "xxx";
+        str.replace("x", "A");
         
         // 返回这个迭代器即可
         Iterator<User> iterator = new Iterator<>(list);

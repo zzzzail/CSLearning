@@ -16,6 +16,9 @@ dependencies {
     // netty 包
     implementation 'io.netty:netty-all:4.1.77.Final'
 
+    // Java 创建、编辑、修改 class 文件的包
+    implementation 'org.ow2.asm:asm:9.2'
+
     // lombok 包
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'

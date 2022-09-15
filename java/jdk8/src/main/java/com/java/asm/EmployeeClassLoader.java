@@ -6,7 +6,7 @@ package com.java.asm;
  */
 public class EmployeeClassLoader extends ClassLoader {
     
-    public Class defineClassFromClassFile(String className, byte[] classFile) throws ClassFormatError {
+    public Class<?> defineClassFromClassFile(String className, byte[] classFile) throws ClassFormatError {
         return defineClass(className, classFile, 0, classFile.length);
     }
     

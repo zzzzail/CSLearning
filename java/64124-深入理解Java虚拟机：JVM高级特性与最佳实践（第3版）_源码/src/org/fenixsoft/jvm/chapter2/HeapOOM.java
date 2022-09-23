@@ -20,16 +20,6 @@ public class HeapOOM {
         while (true) {
             list.add(new OOMObject());
         }
-        
-        List<char[]> caList = new ArrayList<>();
-        // 准确一些的内存溢出
-        // 一个 char 类型的数据占 1 个字节
-        // char[] charArr = new char[1024]; // 占 1024 个字节，相当于 1KB
-        // 10MB = 2 ^ 10 * 2 ^ 10
-        // 我们直接循环 1024 次，每次申请一个 1KB 的数组即可
-        for (int i = 0; i < 1024; i++) {
-            caList.add(new char[1024]);
-        }
     }
 }
 

@@ -8,7 +8,6 @@ public class ThreadLocalDemo {
     private static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
     
     public static void main(String[] args) {
-        
         new Thread(() -> {
             try {
                 threadLocal.set("aaa");

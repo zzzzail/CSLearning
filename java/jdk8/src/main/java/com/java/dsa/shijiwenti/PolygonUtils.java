@@ -144,8 +144,10 @@ public class PolygonUtils {
         int[] V = new int[n];
         
         /* we want a counter-clockwise polygon in V */
-        if (0 < area(contour)) for (int v = 0; v < n; v++) V[v] = v;
-        else for (int v = 0; v < n; v++) V[v] = (n - 1) - v;
+        if (0 < area(contour))
+            for (int v = 0; v < n; v++) V[v] = v;
+        else
+            for (int v = 0; v < n; v++) V[v] = (n - 1) - v;
         
         int nv = n;
         

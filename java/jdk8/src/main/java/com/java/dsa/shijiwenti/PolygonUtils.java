@@ -42,8 +42,13 @@ public class PolygonUtils {
     
     
     public static boolean insidePolygon(Point2D p, List<Point2D> contour, boolean precisely) {
-        if (precisely) return insidePolygonPrecisely(p, contour);
-        else return false;
+        if (precisely) {
+            return insidePolygonPrecisely(p, contour);
+        }
+        else {
+            // 利用叉乘法求点 p 是否在一个凸多边形内
+            return false;
+        }
     }
     
     /**

@@ -1,7 +1,5 @@
 package com.java.dsa.shijiwenti;
 
-import com.sun.xml.internal.fastinfoset.algorithm.BooleanEncodingAlgorithm;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +35,7 @@ public class PolygonUtils {
             long[] conp = contour[i];
             _contour.add(new Point2D(conp[0], conp[1]));
         }
+        
         return insidePolygon(_p, _contour, true);
     }
     
@@ -122,6 +121,17 @@ public class PolygonUtils {
         return ((aCROSSbp >= 0) && (bCROSScp >= 0) && (cCROSSap >= 0));
     }
     
+    /**
+     * 截取
+     *
+     * @param contour
+     * @param u
+     * @param v
+     * @param w
+     * @param n
+     * @param V
+     * @return
+     */
     private static boolean snip(List<Point2D> contour, int u, int v, int w, int n, int[] V) {
         int p;
         long Ax, Ay, Bx, By, Cx, Cy, Px, Py;
@@ -158,9 +168,11 @@ public class PolygonUtils {
         int n = contour.size();
         if (n < 3) return false;
         
+        // 带有顺序的点集下标
         int[] V = new int[n];
         
         /* we want a counter-clockwise polygon in V */
+        /* 逆时针轮廓点集 */
         if (0 < area(contour))
             for (int v = 0; v < n; v++) V[v] = v;
         else
@@ -169,7 +181,7 @@ public class PolygonUtils {
         int nv = n;
         
         /*  remove nv-2 Vertices, creating 1 triangle every time */
-        int count = 2 * nv;   /* error detection */
+        int count = 2 * nv;   /* 错误检查 error detection */
         
         for (int m = 0, v = nv - 1; nv > 2; ) {
             /* if we loop, it is probably a non-simple polygon */
@@ -178,6 +190,7 @@ public class PolygonUtils {
                 return false;
             }
             
+            // 当前多边形中的三个连续顶点 <u,v,w>
             /* three consecutive vertices in current polygon, <u,v,w> */
             int u = v;
             if (nv <= u) u = 0;     /* previous */
@@ -194,7 +207,7 @@ public class PolygonUtils {
                 b = V[v];
                 c = V[w];
                 
-                /* output Triangle */
+                /* output Triangle 输出三角形的三条边 */
                 result.add(contour.get(a));
                 result.add(contour.get(b));
                 result.add(contour.get(c));

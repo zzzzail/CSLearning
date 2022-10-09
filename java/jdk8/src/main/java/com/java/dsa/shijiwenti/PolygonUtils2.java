@@ -30,7 +30,10 @@ public class PolygonUtils2 {
     }
     
     /**
-     * 利用射线法判断点 p 是否在由 contour 轮廓点集组成的多边形内
+     * 利用射线法判断点 p 是否在由 contour 轮廓点集组成的多边形内。
+     * 点 p 沿着 x 轴向右画一条无限长的射线 A，判断每一条边与射线 A 是否相交，并记录一次，
+     * 相交的次数为奇数时，说明点 p 在多边形内，若相交点次数为偶数时，说明点 p 不在多边形内。
+     *
      * https://blog.csdn.net/WilliamSun0122/article/details/77994526?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~default-1-77994526-blog-102737081.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~default-1-77994526-blog-102737081.pc_relevant_default&utm_relevant_index=1
      *
      * @param p       点 p

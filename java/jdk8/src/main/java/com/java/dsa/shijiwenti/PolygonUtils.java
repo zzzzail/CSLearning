@@ -124,13 +124,13 @@ public class PolygonUtils {
     /**
      * 截取
      *
-     * @param contour
-     * @param u
-     * @param v
-     * @param w
-     * @param n
-     * @param V
-     * @return
+     * @param contour 轮廓点集
+     * @param u       三角形的第一条边 下标
+     * @param v       三角形的第二条边 下标
+     * @param w       三角形的第三条边 下标
+     * @param n       共 n 个边
+     * @param V       多边形的点集下表数组
+     * @return 截取成功与否
      */
     private static boolean snip(List<Point2D> contour, int u, int v, int w, int n, int[] V) {
         int p;

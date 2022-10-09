@@ -33,7 +33,7 @@ public class PolygonUtils2 {
      * 利用射线法判断点 p 是否在由 contour 轮廓点集组成的多边形内。
      * 点 p 沿着 x 轴向右画一条无限长的射线 A，判断每一条边与射线 A 是否相交，并记录一次，
      * 相交的次数为奇数时，说明点 p 在多边形内，若相交点次数为偶数时，说明点 p 不在多边形内。
-     *
+     * <p>
      * https://blog.csdn.net/WilliamSun0122/article/details/77994526?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~default-1-77994526-blog-102737081.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~default-1-77994526-blog-102737081.pc_relevant_default&utm_relevant_index=1
      *
      * @param p       点 p
@@ -42,20 +42,17 @@ public class PolygonUtils2 {
      */
     private static boolean insidePolygon(Point2D p, List<Point2D> contour) {
         int n = contour.size();
-        boolean flag = false; // 结果
-        Point2D p1, p2; // 多边形一条边的两个顶点
-        for (int i = 0, j = n - 1; i < n; j = i++) {
-            // 给出多边形的两个顶点
-            p1 = contour.get(i);
-            p2 = contour.get(j);
-            // 点在多变形的一条边上
-            if (onSegment(p1, p2, p)) {
-                return true;
-            }
-            // 前一个判断 min(p1.y, p2.y) < p.y <= max(p1.y, p2.y)
-            // 后一个判断被测点在射线与边交点的左边
-            if (((p1.y - p.y > 0) != (p2.y - p.y > 0)) &&
-                    (p.x - (p.y - p1.y) * (p1.x - p2.x) / (p1.y - p2.y) - p1.x) < 0) {
+        boolean flag = false;
+        for (int i = 0; i < n; i++) {
+            Point2D a = contour.get(i);
+            Point2D b = contour.get( (i + 1) % n );
+            // 若点 p 在 a -> b 的边上，则说明点在多边形内
+            if (onSegment(a, b, p)) return true;
+            
+            // 前一个判断 min(a.y, b.y) < p.y <= max(a.y, b.y)，就是数轴上判断 a.y 和 b.y 分别任意在 p.y 的左右两侧
+            // 后一个判断被测点 p 在 x 轴方向上的射线与边 a -> b 交点的左边
+            if (( (a.y - p.y > 0) != (b.y - p.y > 0) ) &&
+                    0 < (p.x - (p.y - a.y) * (a.x - b.x) / (a.y - b.y) - a.x) ) {
                 flag = !flag;
             }
         }

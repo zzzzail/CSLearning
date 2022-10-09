@@ -18,11 +18,11 @@ public class PolygonUtilsTest {
                 {10, 0}
         };
         long[] p1 = {0, 0};
-        System.out.println(PolygonUtils.insidePolygon(p1, contour1));
+        System.out.println(PolygonUtils2.insidePolygon(p1, contour1));
         long[] p2 = {2, 2};
-        System.out.println(PolygonUtils.insidePolygon(p2, contour1));
+        System.out.println(PolygonUtils2.insidePolygon(p2, contour1));
         long[] p3 = {10, 11};
-        System.out.println(PolygonUtils.insidePolygon(p3, contour1));
+        System.out.println(PolygonUtils2.insidePolygon(p3, contour1));
         
         // 围栏 1
         long[][] fence1 = new long[][]{
@@ -32,9 +32,9 @@ public class PolygonUtilsTest {
         };
         long[] insidePoint1 =  {11848587002363406L, 3895944531934258L}; // 内部点
         long[] outsidePoint1 = {11848587002363406L, 3890944531934258L}; // 外部点
-        boolean insideRes1 = PolygonUtils.insidePolygon(insidePoint1, fence1);
+        boolean insideRes1 = PolygonUtils2.insidePolygon(insidePoint1, fence1);
         System.out.println(insideRes1 ? "【正确】点在内部" : "点在外部");
-        boolean outsideRes1 = PolygonUtils.insidePolygon(outsidePoint1, fence1);
+        boolean outsideRes1 = PolygonUtils2.insidePolygon(outsidePoint1, fence1);
         System.out.println(outsideRes1 ? "点在内部" : "【正确】点在外部");
         
         // 围栏2
@@ -46,9 +46,9 @@ public class PolygonUtilsTest {
         };
         long[] insidePoint2 =  {11848587002363406L, 3895944531934258L}; // 内部点
         long[] outsidePoint2 = {11848587002363406L, 3890944531934258L}; // 外部点
-        boolean insideRes2 = PolygonUtils.insidePolygon(insidePoint2, fence2);
+        boolean insideRes2 = PolygonUtils2.insidePolygon(insidePoint2, fence2);
         System.out.println(insideRes2 ? "【正确】点在内部" : "点在外部");
-        boolean outsideRes2 = PolygonUtils.insidePolygon(outsidePoint2, fence2);
+        boolean outsideRes2 = PolygonUtils2.insidePolygon(outsidePoint2, fence2);
         System.out.println(outsideRes2 ? "点在内部" : "【正确】点在外部");
     }
 }

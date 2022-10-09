@@ -1,5 +1,7 @@
 package com.java.dsa.shijiwenti;
 
+import com.sun.xml.internal.fastinfoset.algorithm.BooleanEncodingAlgorithm;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,10 @@ public class PolygonUtils {
     static final float EPSILON = 0.0000000001f;
     
     public static boolean insidePolygon(long[] p, long[][] contour) {
+        return insidePolygon(p, contour, true);
+    }
+    
+    public static boolean insidePolygon(long[] p, long[][] contour, boolean precisely) {
         if (p.length != 2) return false;
         if (contour.length < 3) return false;
         for (int i = 0; i < contour.length; i++) {
@@ -31,7 +37,13 @@ public class PolygonUtils {
             long[] conp = contour[i];
             _contour.add(new Point2D(conp[0], conp[1]));
         }
-        return insidePolygon(_p, _contour);
+        return insidePolygon(_p, _contour, true);
+    }
+    
+    
+    public static boolean insidePolygon(Point2D p, List<Point2D> contour, boolean precisely) {
+        if (precisely) return insidePolygonPrecisely(p, contour);
+        else return false;
     }
     
     /**
@@ -41,7 +53,7 @@ public class PolygonUtils {
      * @param contour 轮廓点集
      * @return true 是在区域内，否则返回 false
      */
-    public static boolean insidePolygon(Point2D p, List<Point2D> contour) {
+    private static boolean insidePolygonPrecisely(Point2D p, List<Point2D> contour) {
         // 1. 将有 n 个点的区域 area 划分为 n - 2 个三角形
         // 将 area 区域的点按照连接边的顺序排序
         // 任取一个点，需要保证该点的前后两条边形成的角是锐角
@@ -105,7 +117,7 @@ public class PolygonUtils {
         return ((aCROSSbp >= 0) && (bCROSScp >= 0) && (cCROSSap >= 0));
     }
     
-    public static boolean snip(List<Point2D> contour, int u, int v, int w, int n, int[] V) {
+    private static boolean snip(List<Point2D> contour, int u, int v, int w, int n, int[] V) {
         int p;
         long Ax, Ay, Bx, By, Cx, Cy, Px, Py;
         

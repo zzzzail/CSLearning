@@ -39,7 +39,7 @@ public class PolygonUtils2 {
      */
     private static boolean insidePolygon(Point2D p, List<Point2D> contour) {
         int n = contour.size();
-        boolean flag = false; // 计数
+        boolean flag = false; // 结果
         Point2D p1, p2; // 多边形一条边的两个顶点
         for (int i = 0, j = n - 1; i < n; j = i++) {
             // 给出多边形的两个顶点
@@ -49,8 +49,8 @@ public class PolygonUtils2 {
             if (onSegment(p1, p2, p)) {
                 return true;
             }
-            // 前一个判断 min(P1.y,P2.y) < P.y <= max(P1.y,P2.y)
-            // 后一个判断被测点 在 射线与边交点 的左边
+            // 前一个判断 min(p1.y, p2.y) < p.y <= max(p1.y, p2.y)
+            // 后一个判断被测点在射线与边交点的左边
             if (((p1.y - p.y > 0) != (p2.y - p.y > 0)) &&
                     (p.x - (p.y - p1.y) * (p1.x - p2.x) / (p1.y - p2.y) - p1.x) < 0) {
                 flag = !flag;
@@ -60,7 +60,8 @@ public class PolygonUtils2 {
     }
     
     private static boolean onSegment(Point2D A, Point2D B, Point2D p) {
-        // 前一个判断点 Q 在P1P2直线上 后一个判断在P1P2范围上
+        // 前一个判断点 p 在 A -> B 直线上
+        // 后一个判断在 A B 范围上
         return A.vectorSubtract(p).vectorX(B.vectorSubtract(p)) == 0
                 && A.vectorSubtract(p).vectorMultiply(B.vectorSubtract(p)) <= 0;
     }

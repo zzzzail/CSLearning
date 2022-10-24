@@ -7,7 +7,7 @@ package com.java.dsa.leetcode;
  * @link <a href="https://leetcode.cn/problems/median-of-two-sorted-arrays/">寻找两个正序数组的中位数</a>
  * @date 2022/5/27
  */
-public class P4MedianOfTwoSortedArrays1 {
+public class P4MedianOfTwoSortedArrays01 {
     
     public static void main(String[] args) {
     

@@ -10,10 +10,10 @@ import java.util.Set;
  * @link <a href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/">无重复字符的最长子串</a>
  * @date 2022/5/27
  */
-public class P3LongestSubstringWithoutRepeatingCharacters1 {
+public class P3LongestSubstringWithoutRepeatingCharacters01 {
     
     public static void main(String[] args) {
-        P3LongestSubstringWithoutRepeatingCharacters1 solution = new P3LongestSubstringWithoutRepeatingCharacters1();
+        P3LongestSubstringWithoutRepeatingCharacters01 solution = new P3LongestSubstringWithoutRepeatingCharacters01();
         int res1 = solution.lengthOfLongestSubstring2("abcabcbb");
         System.out.println(res1);
         

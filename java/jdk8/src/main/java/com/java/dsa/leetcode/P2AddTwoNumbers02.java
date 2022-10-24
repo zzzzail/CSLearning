@@ -11,6 +11,9 @@ public class P2AddTwoNumbers02 {
     }
     
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        // 虚拟头节点
+        // dummy 是一个最前面的哨兵，如果遇到循环里需要特殊创建一个对象的时候，可以提
+        // 前建立一个哨兵节点（这样就不用特殊判断了）
         ListNode dummy = new ListNode(-1), cur = dummy;
         int carry = 0;
         while (l1 != null || l2 != null || carry != 0) {

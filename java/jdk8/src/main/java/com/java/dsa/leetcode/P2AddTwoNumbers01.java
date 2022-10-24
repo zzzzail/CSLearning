@@ -7,10 +7,10 @@ package com.java.dsa.leetcode;
  * @link <a href="https://leetcode.cn/problems/add-two-numbers/">两数相加</a>
  * @date 2022/5/27
  */
-public class P2AddTwoNumbers1 {
+public class P2AddTwoNumbers01 {
     
     public static void main(String[] args) {
-        P2AddTwoNumbers1 solution = new P2AddTwoNumbers1();
+        P2AddTwoNumbers01 solution = new P2AddTwoNumbers01();
         ListNode l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
         ListNode l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
         ListNode res1 = solution.addTwoNumbers(l1, l2);

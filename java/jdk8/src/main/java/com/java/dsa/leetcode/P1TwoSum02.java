@@ -11,10 +11,10 @@ import java.util.Map;
  * <p>
  * 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
  */
-public class P1TwoSum2 {
+public class P1TwoSum02 {
     
     public static void main(String[] args) {
-        P1TwoSum2 solution = new P1TwoSum2();
+        P1TwoSum02 solution = new P1TwoSum02();
         int[] nums = new int[]{1, 2, 3, 4};
         int[] result1 = solution.twoSum(nums, 7);
         System.out.println(Arrays.toString(result1));

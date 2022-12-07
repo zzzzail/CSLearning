@@ -1,11 +1,13 @@
 package labrpc
 
-import "testing"
-import "strconv"
-import "sync"
-import "runtime"
-import "time"
-import "fmt"
+import (
+	"fmt"
+	"runtime"
+	"strconv"
+	"sync"
+	"testing"
+	"time"
+)
 
 type JunkArgs struct {
 	X int
@@ -67,8 +69,12 @@ func (js *JunkServer) Handler7(args int, reply *string) {
 }
 
 func TestBasic(t *testing.T) {
+	fmt.Println("开始测试")
+
+	// 设置有几个 CPU 同时执行
 	runtime.GOMAXPROCS(4)
 
+	// 创建一个网络
 	rn := MakeNetwork()
 	defer rn.Cleanup()
 

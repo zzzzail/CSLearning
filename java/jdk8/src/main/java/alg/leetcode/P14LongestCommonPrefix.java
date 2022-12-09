@@ -14,7 +14,9 @@ public class P14LongestCommonPrefix {
     }
     
     /**
-     * 看成一个矩阵 先遍历列，再遍历行即可
+     * 将所有单词看成一个由所有单词首字母共同开始，各自结束的字母矩阵。
+     * 而后先遍历列，遍历完列后可判断出第一列中出现的字母是否都一致，若一致则加入到最长公共前缀中，
+     * 若不一致则结束遍历。
      */
     public String longestCommonPrefix(String[] strs) {
         int m = strs.length, n = strs[0].length();

@@ -9,7 +9,7 @@ public class Application {
         feature01();
         feature02();
         feature03();
-    
+        
         var a = 100;
         // a = a ** 2;
         // a = a ^ 200;

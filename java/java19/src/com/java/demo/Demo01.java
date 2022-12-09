@@ -12,14 +12,14 @@ public class Demo01 {
     
     public static void main(String[] args) {
         System.out.println("Hello Java 19!");
-    
+        
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            IntStream.range(0, 10_000).forEach(i -> {
+            for (int i = 0; i < 10_0000; i++) {
+                int finalI = i;
                 executor.submit(() -> {
-                    Thread.sleep(Duration.ofSeconds(1));
-                    return i;
+                    System.out.println(finalI);
                 });
-            });
-        }  // executor.close() is called implicitly, and waits
+            }
+        }
     }
 }

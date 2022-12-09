@@ -3,13 +3,9 @@ package alg.leetcode;
 import java.util.*;
 
 /**
- * https://leetcode-cn.com/problems/3sum/
  * 三数之和
- * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得
- * a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
- * <p>
- * 输入：nums = [-1,0,1,2,-1,-4]
- * 输出：[[-1,-1,2],[-1,0,1]]
+ *
+ * @link https://leetcode-cn.com/problems/3sum/
  */
 public class P15ThreeSum {
     
@@ -68,8 +64,8 @@ public class P15ThreeSum {
                 int t = nums[i] + nums[l] + nums[r];
                 if (t == 0) {
                     res.add(Arrays.asList(nums[i], nums[l], nums[r]));
-                    while (l < r && nums[l] == nums[++l]) {}; // 过掉重复的元素
-                    while (l < r && nums[r] == nums[--r]) {}; // 过掉重复的元素
+                    while (l < r && nums[l] == nums[++l]) {} // 过掉重复的元素
+                    while (l < r && nums[r] == nums[--r]) {} // 过掉重复的元素
                 }
                 else if (t < 0) l++; // 太弱了
                 else r--;            // 太强了

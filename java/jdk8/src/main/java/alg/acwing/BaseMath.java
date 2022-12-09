@@ -1,6 +1,8 @@
 package alg.acwing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zhangxq
@@ -50,7 +52,7 @@ public class BaseMath {
     /**
      * 朴素筛法求素数
      */
-    public void getPrimes(int n) {
+    public void getPrimes1(int n) {
         // primes 数组存储所有素数
         int[] primes = new int[n + 1];
         int cnt = 0;
@@ -65,4 +67,23 @@ public class BaseMath {
         }
         System.out.println(Arrays.toString(primes));
     }
+    
+    // 线性筛法求素数
+    public void getPrimes2(int n) {
+        int cnt = 0;
+        // primes 存储所有素数
+        List<Integer> primes = new ArrayList<>();
+        List<Boolean> st = new ArrayList<>();
+        for (int i = 2; i <= n; i ++ ) {
+            if (!st.get(i)) {
+                primes.set(cnt++, i);
+            }
+            for (int j = 0; primes.get(j) <= n / i; j ++ )
+            {
+                st.set(primes.get(j) * i, true);
+                if (i % primes.get(j) == 0) break;
+            }
+        }
+    }
+    
 }

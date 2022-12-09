@@ -4,7 +4,7 @@ package alg.leetcode;
  * @link https://leetcode.cn/problems/regular-expression-matching/
  * 正则表达式匹配
  */
-public class P10RegularExpressionMatching1 {
+public class P10RegularExpressionMatching {
     
     public static void main(String[] args) {
     
@@ -17,10 +17,6 @@ public class P10RegularExpressionMatching1 {
      * 子问题：
      * DP 数组： dp[i][j] 表示 s[0...i - 1] 和 p[0...j - 1] 是否匹配
      * DP 方程：
-     * |
-     * |
-     * |
-     * |
      * 初始化： 多初始化一行一列
      * 结果： dp[m][n]
      */

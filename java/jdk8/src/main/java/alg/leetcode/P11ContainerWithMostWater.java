@@ -1,10 +1,12 @@
 package alg.leetcode;
 
+import java.util.logging.Level;
+
 /**
  * @link https://leetcode-cn.com/problems/container-with-most-water/
  * 使容器容纳最大水量
  * 容量 = 数组长度 * 数值高度
- *
+ * <p>
  * 假设 x 为起始位置，y 为最终位置。则
  * 容量 = ( y - x ) * min{height[x], height[y]}
  */
@@ -12,7 +14,7 @@ public class P11ContainerWithMostWater {
     
     public static void main(String[] args) {
         P11ContainerWithMostWater solution = new P11ContainerWithMostWater();
-        int[] height = new int[]{1,8,6,2,5,4,8,3,7};
+        int[] height = new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7};
         int max = solution.maxArea2(height);
         System.out.println(max);
     }
@@ -28,7 +30,7 @@ public class P11ContainerWithMostWater {
         int c = 0;
         for (int i = 0; i < height.length; i++) {
             for (int j = i + 1; j < height.length; j++) {
-                if ( max < ( c = ( j - i ) * Math.min(height[i], height[j]) ) ) {
+                if (max < (c = (j - i) * Math.min(height[i], height[j]))) {
                     max = c;
                 }
             }
@@ -47,9 +49,9 @@ public class P11ContainerWithMostWater {
     public int maxArea2(int[] height) {
         int max = 0;
         for (int i = 0, j = height.length - 1; i < j; ) {
-            int minHeight = height[i] < height[j] ? height[i++] : height[j--];
-            int area = (j - i + 1) * minHeight; // 这里莫名其妙加 1 是因为上面的 i++ 和 j-- 造成的
-            max = Math.max(max, area);
+            max = Math.max(max, Math.min(height[i], height[j]) * (j - i));
+            if (height[i] > height[j]) j--;
+            else i++;
         }
         return max;
     }

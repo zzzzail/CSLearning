@@ -21,7 +21,7 @@ public class P18FourSum {
     public List<List<Integer>> fourSum(int[] nums, int target) {
         // 先排序
         Arrays.sort(nums);
-    
+        
         List<List<Integer>> res = new ArrayList<>();
         for (int i = 0; i < nums.length; i++) {
             // 若遇到重复数字则跳过
@@ -29,10 +29,16 @@ public class P18FourSum {
             for (int j = i + 1; j < nums.length; j++) {
                 if (j > i + 1 && nums[j - 1] == nums[j]) continue;
                 for (int k = j + 1, u = nums.length - 1; k < u; k++) {
-                    if (k > j + 1 && nums[k- 1] == nums[k]) continue;
+                    if (k > j + 1 && nums[k - 1] == nums[k]) continue;
                     // 这里要注意加法溢出的问题
-                    while (u - 1 > k && (long) (nums[i]) + nums[j] + nums[k] + nums[u - 1] >= target) u--;
-                    if ((long) (nums[i]) + nums[j] + nums[k] + nums[u] == target) {
+                    // while (u - 1 > k && (long) (nums[i]) + nums[j] + nums[k] + nums[u - 1] >= target) u--;
+                    // if ((long) (nums[i]) + nums[j] + nums[k] + nums[u] == target) {
+                    //     res.add(Arrays.asList(nums[i], nums[j], nums[k], nums[u]));
+                    // }
+                    
+                    // 这段逻辑和上段是一样的
+                    while (u > k && (long) (nums[i]) + nums[j] + nums[k] + nums[u] > target) u--;
+                    if (u > k && (long) (nums[i]) + nums[j] + nums[k] + nums[u] == target) {
                         res.add(Arrays.asList(nums[i], nums[j], nums[k], nums[u]));
                     }
                 }

@@ -80,6 +80,11 @@ public class P21MergeTwoSortedLists {
         return head;
     }
     
+    // 使用虚拟头节点解决特判的问题（头节点会改变的情况下，可使用虚拟头节点）
+    public static ListNode mergeTwoLists3(ListNode l1, ListNode l2) {
+        return null;
+    }
+    
     static class ListNode {
         int val;
         ListNode next;

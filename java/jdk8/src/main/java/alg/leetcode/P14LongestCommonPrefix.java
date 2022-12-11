@@ -33,4 +33,24 @@ public class P14LongestCommonPrefix {
         }
         return strs[0].substring(0, col);
     }
+    
+    // 不用 substring 方法实现
+    public String longestCommonPrefix2(String[] strs) {
+        int m = strs.length, n = strs[0].length();
+        if (m == 0) return "";
+        if (m == 1) return strs[0];
+        
+        StringBuilder sb = new StringBuilder();
+        int col = 0;
+        for (; col < n; col++) {
+            int row = 1;
+            for (; row < m; row++) {
+                if (strs[row].length() <= col || strs[0].charAt(col) != strs[row].charAt(col)) {
+                    return sb.toString();
+                }
+            }
+            sb.append(strs[0].charAt(col));
+        }
+        return sb.toString();
+    }
 }

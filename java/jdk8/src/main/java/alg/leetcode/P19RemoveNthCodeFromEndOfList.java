@@ -4,7 +4,7 @@ package alg.leetcode;
  * @author zhangxq
  * @since 2022/12/11
  */
-public class P18RemoveNthCodeFromEndOfList {
+public class P19RemoveNthCodeFromEndOfList {
     
     public ListNode removeNthFromEnd(ListNode head, int n) {
         

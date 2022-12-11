@@ -34,7 +34,7 @@ public class P14LongestCommonPrefix {
         return strs[0].substring(0, col);
     }
     
-    // 不用 substring 方法实现
+    // 不用 substring 方法实现（substring 会消耗更多的性能）
     public String longestCommonPrefix2(String[] strs) {
         int m = strs.length, n = strs[0].length();
         if (m == 0) return "";

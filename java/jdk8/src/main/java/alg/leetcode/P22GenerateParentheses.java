@@ -78,7 +78,17 @@ public class P22GenerateParentheses {
         return res;
     }
     
-    // 这是从 AcWing y 总那学的逻辑
+    /**
+     * 这是从 AcWing y 总那学的逻辑
+     *
+     * 一组括号是格式正确的括号，它的充分必要条件有两个
+     * 1. 任意前缀的 ( 数 >= ) 数
+     * 2. 左右括号数量相等
+     *
+     * dfs 的核心思想
+     * * 任意前缀只要满足一个条件，即 ( 数比 n 小，则就可以追加 (
+     * * 任意前缀只要满足 ) 数比 n 小且 ( 数 > ) 数
+     */
     public static List<String> generateParenthesis3(int n) {
         List<String> res = new ArrayList<>();
         dfs3(n, 0, 0, "", res);

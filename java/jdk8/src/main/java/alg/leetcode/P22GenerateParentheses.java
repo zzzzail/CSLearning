@@ -3,8 +3,9 @@ package alg.leetcode;
 import java.util.*;
 
 /**
- * @link https://leetcode-cn.com/problems/generate-parentheses/
  * 括号生成
+ *
+ * @link https://leetcode-cn.com/problems/generate-parentheses/
  */
 public class P22GenerateParentheses {
     
@@ -75,6 +76,23 @@ public class P22GenerateParentheses {
             }
         }
         return res;
+    }
+    
+    // 这是从 AcWing y 总那学的逻辑
+    public static List<String> generateParenthesis3(int n) {
+        List<String> res = new ArrayList<>();
+        dfs3(n, 0, 0, "", res);
+        return res;
+    }
+    
+    private static void dfs3(int n, int lc, int rc, String path, List<String> res) {
+        if (lc == n && rc == n) {
+            res.add(path);
+            return;
+        }
+        
+        if (lc < n) dfs3(n, lc + 1, rc, path + "(", res);
+        if (rc < n && lc > rc) dfs3(n, lc, rc + 1, path + ")", res);
     }
     
     static class Node {

@@ -97,6 +97,29 @@ type RequestVoteReply struct {
 	VoteGranted bool // 投票授权
 }
 
+type AppendEntriesArgs struct {
+	// 2A
+	Term     int
+	LeaderId int
+
+	// 2B
+	PrevLogIndex int
+	PrevLogTerm  int
+	LogEntries   []LogEntry
+	LeaderCommit int
+}
+
+type AppendEntriesReply struct {
+	// 2A
+	Term    int
+	Success bool
+
+	// 2C
+	// OPTIMIZE: see thesis section 5.3
+	ConflictTerm  int
+	ConflictIndex int
+}
+
 // A Go object implementing a single Raft peer.
 type Raft struct {
 	mu        sync.Mutex          // Lock to protect shared access to this peer's state
@@ -219,6 +242,78 @@ func (rf *Raft) broadcastHeartbeat() {
 				rf.syncSnapshotWith(server)
 				return
 			}
+
+			// use deep copy to avoid race condition
+			// when override log in AppendEntries()
+			entries := make([]LogEntry, len(rf.logs[rf.getRelativeLogIndex(prevLogIndex+1):]))
+			copy(entries, rf.logs[rf.getRelativeLogIndex(prevLogIndex+1):])
+
+			args := AppendEntriesArgs{
+				Term:         rf.currentTerm,
+				LeaderId:     rf.me,
+				PrevLogIndex: prevLogIndex,
+				PrevLogTerm:  rf.logs[rf.getRelativeLogIndex(prevLogIndex)].Term,
+				LogEntries:   entries,
+				LeaderCommit: rf.commitIndex,
+			}
+			rf.mu.Unlock()
+
+			var reply AppendEntriesReply
+			if rf.sendAppendEntries(server, &args, &reply) {
+				rf.mu.Lock()
+				if rf.state != Leader {
+					rf.mu.Unlock()
+					return
+				}
+
+				if reply.Success {
+					// successfully replicated args.LogEntries
+					rf.matchIndex[server] = args.PrevLogIndex + len(args.LogEntries)
+					rf.nextIndex[server] = rf.matchIndex[server] + 1
+
+					// check if we need to update commitIndex
+					// from the last log entry to committed one
+					for i := rf.getAbsoluteLogIndex(len(rf.logs) - 1); i > rf.commitIndex; i-- {
+						count := 0
+						for _, matchIndex := range rf.matchIndex {
+							if matchIndex >= 1 {
+								count += 1
+							}
+
+							if count > len(rf.peers)/2 {
+								// most of nodes agreed on rf.logs[i]
+								rf.setCommitIndex(i)
+								break
+							}
+						}
+					}
+				} else {
+					if reply.Term > rf.currentTerm {
+						rf.currentTerm = reply.Term
+						rf.convertTo(Follower)
+						rf.persist()
+					} else {
+						// log unmatch, update nextIndex[server] for the next trial
+						rf.nextIndex[server] = reply.ConflictIndex
+
+						// if term found, override it to
+						// the first entry after entries in ConflictTerm
+						if reply.ConflictTerm != -1 {
+							DPrintf("%v conflict with server %d, prevLogIndex %d, log length = %d",
+								rf, server, args.PrevLogIndex, len(rf.logs))
+							for i := args.PrevLogIndex; i >= rf.snapshottedIndex+1; i-- {
+								if rf.logs[rf.getRelativeLogIndex(i-1)].Term == reply.ConflictTerm {
+									// in next trial, check if log entries in ConflictTerm matches
+									rf.nextIndex[server] = i
+									break
+								}
+							}
+						}
+
+						// TODO: retry now or in next RPC?
+					}
+				}
+			}
 		}(i)
 
 	}
@@ -226,6 +321,16 @@ func (rf *Raft) broadcastHeartbeat() {
 
 func (rf *Raft) syncSnapshotWith(server int) {
 	// todo 同步快照到 server
+}
+
+func (rf *Raft) getRelativeLogIndex(index int) int {
+	// index of rf.logs
+	return index - rf.snapshottedIndex
+}
+
+func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *AppendEntriesReply) bool {
+	ok := rf.peers[server].Call("Raft.AppendEntries", args, reply)
+	return ok
 }
 
 // restore previously persisted state.
@@ -246,6 +351,10 @@ func (rf *Raft) readPersist(data []byte) {
 	//   rf.xxx = xxx
 	//   rf.yyy = yyy
 	// }
+}
+
+func (rf *Raft) setCommitIndex(commitIndex int) {
+
 }
 
 // A service wants to switch to snapshot.  Only do so if Raft hasn't
@@ -384,11 +493,35 @@ func (rf *Raft) killed() bool {
 // The ticker go routine starts a new election if this peer hasn't received
 // heartsbeats recently.
 func (rf *Raft) ticker() {
-	for rf.killed() == false {
+	for !rf.killed() {
 
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
 		// time.Sleep().
+
+		select {
+		case <-rf.electionTimer.C:
+			rf.mu.Lock()
+			// we know the timer has stopped now
+			// no need to call Stop()
+			rf.electionTimer.Reset(RandTimeDuration(ElectionTimeoutLower, ElectionTimeoutUpper))
+			if rf.state == Follower {
+				// Raft::startElection() is called in conversion to Candidate
+				rf.convertTo(Candidate)
+			} else {
+				rf.startElection()
+			}
+			rf.mu.Unlock()
+		case <-rf.heartbeatTimer.C:
+			rf.mu.Lock()
+			if rf.state == Leader {
+				rf.broadcastHeartbeat()
+				// we know the timer has stopped now
+				// no need to call Stop()
+				rf.heartbeatTimer.Reset(HeartbeatInterval)
+			}
+			rf.mu.Unlock()
+		}
 
 	}
 }
@@ -411,9 +544,16 @@ func Make(peers []*labrpc.ClientEnd, me int, persister *Persister, applyCh chan 
 	// Your initialization code here (2A, 2B, 2C).
 	rf.currentTerm = 0
 	rf.votedFor = -1
+	rf.heartbeatTimer = time.NewTimer(HeartbeatInterval)
+	rf.electionTimer = time.NewTimer(RandTimeDuration(ElectionTimeoutLower, ElectionTimeoutUpper))
+	rf.state = Follower
+	rf.applyCh = applyCh
+	rf.logs = make([]LogEntry, 1) // start from index 1
 
 	// initialize from state persisted before a crash
+	rf.mu.Lock()
 	rf.readPersist(persister.ReadRaftState())
+	rf.mu.Unlock()
 
 	// start ticker goroutine to start elections
 	go rf.ticker()

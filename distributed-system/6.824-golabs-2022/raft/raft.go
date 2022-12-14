@@ -27,6 +27,13 @@ import (
 	"6.824/labrpc"
 )
 
+// 设置状态的常量
+const (
+	Follower  = NodeState(1)
+	Candidate = NodeState(2)
+	Leader    = NodeState(3)
+)
+
 // as each Raft peer becomes aware that successive log entries are
 // committed, the peer should send an ApplyMsg to the service (or
 // tester) on the same server, via the applyCh passed to Make(). set
@@ -48,13 +55,6 @@ type ApplyMsg struct {
 	SnapshotIndex int
 }
 
-// 设置状态的常量
-const (
-	Follower  = NodeState(1)
-	Candidate = NodeState(2)
-	Leader    = NodeState(3)
-)
-
 // 节点状态描述
 type NodeState uint8
 
@@ -73,6 +73,28 @@ func (s NodeState) String() string {
 type LogEntry struct {
 	Command interface{}
 	Term    int
+}
+
+// example RequestVote RPC arguments structure.
+// field names must start with capital letters!
+type RequestVoteArgs struct {
+	// Your data here (2A, 2B).
+
+	// 2A
+	Term        int
+	CandidateId int
+
+	// 2B
+	LastLogIndex int
+	LastLogTerm  int
+}
+
+// example RequestVote RPC reply structure.
+// field names must start with capital letters!
+type RequestVoteReply struct {
+	// Your data here (2A).
+	Term        int
+	VoteGranted bool // 投票授权
 }
 
 // A Go object implementing a single Raft peer.
@@ -98,8 +120,8 @@ type Raft struct {
 	logs        []LogEntry
 	commitIndex int
 	lastApplied int
-	nextIndex   int
-	matchIndex  int
+	nextIndex   []int
+	matchIndex  []int
 	applyCh     chan ApplyMsg
 
 	// 3B
@@ -147,7 +169,37 @@ func (rf *Raft) convertTo(s NodeState) {
 			RandTimeDuration(ElectionTimeoutLower, ElectionTimeoutUpper))
 		rf.votedFor = -1
 	case Candidate:
+		// 开始选举
+		rf.startElection()
 	case Leader:
+		for i := range rf.nextIndex {
+			// initialized to leader last log index + 1
+			rf.nextIndex[i] = rf.getAbsoluteLogIndex(len(rf.logs))
+		}
+		for i := range rf.matchIndex {
+			rf.matchIndex[i] = rf.snapshottedIndex
+		}
+
+		rf.electionTimer.Stop()
+		rf.broadcastHeartbeat()
+		ResetTimer(rf.heartbeatTimer, HeartbeatInterval)
+	}
+}
+
+// should be called with lock
+func (rf *Raft) startElection() {
+	defer rf.persist()
+}
+
+func (rf *Raft) getAbsoluteLogIndex(index int) int {
+	// index of log including snapshotted ones
+	return index + rf.snapshottedIndex
+}
+
+// should be called with lock
+func (rf *Raft) broadcastHeartbeat() {
+	for i := range rf.peers {
+
 	}
 }
 
@@ -189,28 +241,6 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 
 }
 
-// example RequestVote RPC arguments structure.
-// field names must start with capital letters!
-type RequestVoteArgs struct {
-	// Your data here (2A, 2B).
-
-	// 2A
-	Term        int
-	CandidateId int
-
-	// 2B
-	LastLogIndex int
-	LastLogTerm  int
-}
-
-// example RequestVote RPC reply structure.
-// field names must start with capital letters!
-type RequestVoteReply struct {
-	// Your data here (2A).
-	Term        int
-	VoteGranted bool // 投票授权
-}
-
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (2A, 2B).
@@ -250,7 +280,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	reply.Term = rf.currentTerm
 	reply.VoteGranted = true
 	// reset timer after grant vote
-	resetTimer(rf.electionTimer, randTimeDuration(ElectionTimeoutLower, ElectionTimeoutUpper))
+	ResetTimer(rf.electionTimer, RandTimeDuration(ElectionTimeoutLower, ElectionTimeoutUpper))
 }
 
 // example code to send a RequestVote RPC to a server.

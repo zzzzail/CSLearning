@@ -199,8 +199,33 @@ func (rf *Raft) getAbsoluteLogIndex(index int) int {
 // should be called with lock
 func (rf *Raft) broadcastHeartbeat() {
 	for i := range rf.peers {
+		if i == rf.me {
+			continue
+		}
+
+		go func(server int) {
+			rf.mu.Lock()
+			if rf.state != Leader {
+				rf.mu.Unlock()
+				return
+			}
+
+			prevLogIndex := rf.nextIndex[server]
+
+			if prevLogIndex < rf.snapshottedIndex {
+				// leader has discarded log entries the follower needs
+				// send snapshot to follower and retry later
+				rf.mu.Unlock()
+				rf.syncSnapshotWith(server)
+				return
+			}
+		}(i)
 
 	}
+}
+
+func (rf *Raft) syncSnapshotWith(server int) {
+	// todo 同步快照到 server
 }
 
 // restore previously persisted state.

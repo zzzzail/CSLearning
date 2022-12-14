@@ -212,6 +212,47 @@ func (rf *Raft) convertTo(s NodeState) {
 // should be called with lock
 func (rf *Raft) startElection() {
 	defer rf.persist()
+
+	rf.currentTerm += 1
+
+	lastLogIndex := len(rf.logs) - 1
+	args := RequestVoteArgs{
+		Term:         rf.currentTerm,
+		CandidateId:  rf.me,
+		LastLogIndex: rf.getAbsoluteLogIndex(lastLogIndex),
+		LastLogTerm:  rf.logs[lastLogIndex].Term,
+	}
+
+	var voteCount int32
+
+	for i := range rf.peers {
+		if i == rf.me {
+			rf.votedFor = rf.me
+			atomic.AddInt32(&voteCount, 1)
+			continue
+		}
+		go func(server int) {
+			var reply RequestVoteReply
+			if rf.sendRequestVote(server, &args, &reply) {
+				rf.mu.Lock()
+				DPrintf("%v got RequestVote response from node %d, VoteGranted=%v, Term=%d",
+					rf, server, reply.VoteGranted, reply.Term)
+				if reply.VoteGranted && rf.state == Candidate {
+					atomic.AddInt32(&voteCount, 1)
+					if atomic.LoadInt32(&voteCount) > int32(len(rf.peers)/2) {
+						rf.convertTo(Leader)
+					}
+				} else {
+					if reply.Term > rf.currentTerm {
+						rf.currentTerm = reply.Term
+						rf.convertTo(Follower)
+						rf.persist()
+					}
+				}
+				rf.mu.Unlock()
+			}
+		}(i)
+	}
 }
 
 func (rf *Raft) getAbsoluteLogIndex(index int) int {

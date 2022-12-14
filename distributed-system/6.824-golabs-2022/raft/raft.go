@@ -144,7 +144,7 @@ func (rf *Raft) convertTo(s NodeState) {
 	case Follower:
 		rf.heartbeatTimer.Stop()
 		ResetTimer(rf.electionTimer,
-			randTimeDuration(ElectionTimeoutLower, ElectionTimeoutUpper))
+			RandTimeDuration(ElectionTimeoutLower, ElectionTimeoutUpper))
 		rf.votedFor = -1
 	case Candidate:
 	case Leader:

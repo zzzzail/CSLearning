@@ -19,11 +19,13 @@ package raft
 
 import (
 	// "bytes"
+	"bytes"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	// "6.824/labgob"
+	"6.824/labgob"
 	"6.824/labrpc"
 )
 
@@ -120,6 +122,18 @@ type AppendEntriesReply struct {
 	ConflictIndex int
 }
 
+type InstallSnapshotArgs struct {
+	Term              int
+	LeaderId          int
+	LastIncludedIndex int
+	LastIncludedTerm  int
+	Date              []byte
+}
+
+type InstallSnapshotReply struct {
+	Term int
+}
+
 // A Go object implementing a single Raft peer.
 type Raft struct {
 	mu        sync.Mutex          // Lock to protect shared access to this peer's state
@@ -173,7 +187,17 @@ func (rf *Raft) persist() {
 	// e.Encode(rf.xxx)
 	// e.Encode(rf.yyy)
 	// data := w.Bytes()
-	// rf.persister.SaveRaftState(data)
+	rf.persister.SaveRaftState(rf.encodeRaftState())
+}
+
+func (rf *Raft) encodeRaftState() []byte {
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+	e.Encode(rf.currentTerm)
+	e.Encode(rf.votedFor)
+	e.Encode(rf.snapshottedIndex)
+	e.Encode(rf.logs)
+	return w.Bytes()
 }
 
 // raft server convert to the NodeState
@@ -213,6 +237,7 @@ func (rf *Raft) convertTo(s NodeState) {
 func (rf *Raft) startElection() {
 	defer rf.persist()
 
+	// 当前任期 + 1
 	rf.currentTerm += 1
 
 	lastLogIndex := len(rf.logs) - 1
@@ -361,7 +386,44 @@ func (rf *Raft) broadcastHeartbeat() {
 }
 
 func (rf *Raft) syncSnapshotWith(server int) {
-	// todo 同步快照到 server
+	// 同步快照到 server
+	rf.mu.Lock()
+	if rf.state != Leader {
+		rf.mu.Unlock()
+		return
+	}
+
+	args := InstallSnapshotArgs{
+		Term:              rf.currentTerm,
+		LeaderId:          rf.me,
+		LastIncludedIndex: rf.snapshottedIndex,
+		LastIncludedTerm:  rf.logs[0].Term,
+		Date:              rf.persister.ReadRaftState(),
+	}
+	DPrintf("%v sync snapshot with server %d for index %d, last snapshotted = %d",
+		rf, server, args.LastIncludedIndex, rf.snapshottedIndex)
+	rf.mu.Unlock()
+
+	var reply InstallSnapshotReply
+	if rf.sendInstallSnapshot(server, &args, &reply) {
+		rf.mu.Lock()
+		if reply.Term > rf.currentTerm {
+			rf.currentTerm = reply.Term
+			rf.convertTo(Follower)
+			rf.persist()
+		} else {
+			if rf.matchIndex[server] < args.LastIncludedIndex {
+				rf.matchIndex[server] = args.LastIncludedIndex
+			}
+			rf.nextIndex[server] = rf.matchIndex[server] + 1
+		}
+		rf.mu.Unlock()
+	}
+}
+
+func (rf *Raft) sendInstallSnapshot(server int, args *InstallSnapshotArgs, reply *InstallSnapshotReply) bool {
+	ok := rf.peers[server].Call("Raft.InstallSnapshot", args, reply)
+	return ok
 }
 
 func (rf *Raft) getRelativeLogIndex(index int) int {
@@ -395,7 +457,33 @@ func (rf *Raft) readPersist(data []byte) {
 }
 
 func (rf *Raft) setCommitIndex(commitIndex int) {
+	rf.commitIndex = commitIndex
+	// apply all entries between lastApplied and committed
+	// should be called after commitIndex updated
+	if rf.commitIndex > rf.lastApplied {
+		DPrintf("%v apply from index %d to %d", rf, rf.lastApplied+1, rf.commitIndex)
+		entriesToApply := append([]LogEntry{},
+			rf.logs[rf.getRelativeLogIndex(rf.lastApplied+1):rf.getRelativeLogIndex(rf.commitIndex+1)]...)
 
+		go func(startIdx int, entries []LogEntry) {
+			for idx, entry := range entries {
+				msg := ApplyMsg{
+					CommandValid: true,
+					Command:      entry.Command,
+					CommandIndex: startIdx + idx,
+				}
+				rf.applyCh <- msg
+
+				// do not forget to update lastApplied index
+				// this is another goroutine, so protect it with lock
+				rf.mu.Lock()
+				if rf.lastApplied < msg.CommandIndex {
+					rf.lastApplied = msg.CommandIndex
+				}
+				rf.mu.Unlock()
+			}
+		}(rf.lastApplied+1, entriesToApply)
+	}
 }
 
 // A service wants to switch to snapshot.  Only do so if Raft hasn't
@@ -508,6 +596,19 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	isLeader := true
 
 	// Your code here (2B).
+	term, isLeader = rf.GetState()
+	if isLeader {
+		rf.mu.Lock()
+		index = rf.getAbsoluteLogIndex(len(rf.logs))
+		rf.logs = append(rf.logs, LogEntry{Command: command, Term: term})
+		rf.matchIndex[rf.me] = index
+		rf.nextIndex[rf.me] = index + 1
+		rf.persist()
+		// start agreement now, note that this does not take too long
+		// because every single RPC is in other goroutine
+		rf.broadcastHeartbeat()
+		rf.mu.Unlock()
+	}
 
 	return index, term, isLeader
 }
